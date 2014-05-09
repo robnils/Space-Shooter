@@ -32,14 +32,24 @@ public class DestroyByContactEnemyBolt : MonoBehaviour
         if (other.tag == "EnemyShip")
             return;
 
+        if (other.tag == "Bolt")
+            return;
+
         // If ship collides with player
         if (other.tag == "Player")
         {
+            // Player explosion
             Instantiate(explosionPlayer, transform.position, transform.rotation);
-            Destroy(other.gameObject);           
+
+            // Destroy bolt and player objects
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+
+            // End the game
             gameController.GameOver();
         }
-
-        Destroy(gameObject);
+        
+        else
+            Destroy(gameObject);
     }
 }

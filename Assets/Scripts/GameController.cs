@@ -217,7 +217,7 @@ public class GameController : MonoBehaviour
 			{
 				// Spawn enemy ship every second wave
                 // NOTE: Make a "Mother Ship" that's big and evades attacks?
-				if(waveCount % 1 == 0)
+				if(waveCount % 2 == 0)
 				{
                     for (int j = 0; j < numberOfEnemyShips; j++)
                     {
