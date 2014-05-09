@@ -40,7 +40,7 @@ public class MoverEnemyShip : MonoBehaviour
         // Make ship fire bolts every fireRate inverse seconds 
         if (Time.time > nextFire)
         {
-            nextFire = Time.time + fireRate + Random.Range(0.0f, 0.50f);
+            nextFire = Time.time + fireRate + Random.Range(0.0f, 0.75f);
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);            
             weapon.Play();
         }

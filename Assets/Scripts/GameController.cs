@@ -6,6 +6,8 @@ using System.Collections;
  * At higher waves, asteroid don't appear. They stay up in the background somewhere, clashing possibly.
  * -- break their interaction
  * Add a life system
+ * Add more asteroids
+ * Consider mesh renderer for asteroids
  */
 
 // Used to spawn hazards
@@ -252,9 +254,10 @@ public class GameController : MonoBehaviour
                     for (int j = 0; j < numberOfEnemyShips; j++)
                     {
                         // Aside from the first wave, increase difficult (ship speed & fire rate) each wave
-                        if (waveCount != 2)
+                        // Note: we're in a loop so we only want the speed to increase once per wave
+                        if (waveCount != 2 && i == 0)
                         {
-                            moverEnemyShip.speed += 0.1f;
+                            moverEnemyShip.speed += 0.2f;
                             moverEnemyShip.fireRate -= 0.01f;
                         }
 
@@ -281,12 +284,16 @@ public class GameController : MonoBehaviour
 				else
 				{
                     // Aside from first wave, increase asteroid difficulty
-                    if (waveCount != 1)
+                    // note the minus sign: speed is negative to incorporate direction opposite to bolts
+                    // Note: we're in a loop so we only want the speed to increase once per wave
+                    if (waveCount != 1 && i==0)
                     {
-                        mover.speed += 0.1f;
+                        mover.speed -= 0.2f;
                     }
 
-					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+                    float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x);
+
+					Vector3 spawnPosition = new Vector3 (range, spawnValues.y, spawnValues.z);
 					Quaternion spawnRotation = Quaternion.identity;
 					Instantiate (hazard, spawnPosition, spawnRotation);
 					yield return new WaitForSeconds (spawnWait);
@@ -294,6 +301,7 @@ public class GameController : MonoBehaviour
 			}
 
 			waveCount++;
+            waveWait += 0.2f; // Increase time between waves each wave
             hazardCount = hazardCount + 3; // add more hazards each wave
 			yield return new WaitForSeconds (waveWait);
 

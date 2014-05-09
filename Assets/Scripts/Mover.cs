@@ -10,9 +10,11 @@ public class Mover : MonoBehaviour
 		// Transform.forward is the local z-axis        
         // Velocity is pointed downward - asteroid falls with speed "speed"
         // which is then scaled randomly between speed and speed*(0.5)
-		rigidbody.velocity = transform.forward * speed * (Random.Range(0.5f,1.0f));
+		
+        rigidbody.velocity = transform.forward * speed * (Random.Range(0.5f,1.0f));
 
         // Currently fixed speed as the asteroids interact and destroy another
+        // Downwards for asteroids, upwards for bolts
         //rigidbody.velocity = transform.forward * speed;
 	}
 
