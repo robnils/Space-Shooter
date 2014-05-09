@@ -16,9 +16,11 @@ public class MoverEnemyShip : MonoBehaviour
 	public bool test = false;
 
     //Sounds
+    /*
     public AudioSource[] sounds;
     public AudioSource weapon;
     public AudioSource explosion;
+     */
 
 	void Start()
 	{
@@ -30,9 +32,11 @@ public class MoverEnemyShip : MonoBehaviour
 
         // Sounds
         nextFire = 1; // Wait one second before firing
+        /*
         sounds = GetComponents<AudioSource>();
         weapon = sounds[0];
         explosion = sounds[1];
+         */
 	}
 
 	void FixedUpdate()
@@ -42,7 +46,7 @@ public class MoverEnemyShip : MonoBehaviour
         {
             nextFire = Time.time + fireRate + Random.Range(0.0f, 0.75f);
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);            
-            weapon.Play();
+            audio.Play();
         }
 
 		// Make the ship bounce off the left and right

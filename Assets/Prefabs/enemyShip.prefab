@@ -79,10 +79,25 @@ GameObject:
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400000}
   - 82: {fileID: 8200000}
-  - 82: {fileID: 8200002}
   m_Layer: 0
   m_Name: enemyShip
   m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100010
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400010}
+  - 82: {fileID: 8200002}
+  m_Layer: 0
+  m_Name: ExplosionSoundEffect
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,7 +160,19 @@ Transform:
   m_Children:
   - {fileID: 400006}
   - {fileID: 400000}
+  - {fileID: 400010}
   m_Father: {fileID: 0}
+--- !u!4 &400010
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100010}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.6347723, y: -.572309792, z: .274149776}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400008}
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -266,7 +293,7 @@ AudioSource:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100008}
+  m_GameObject: {fileID: 100010}
   m_Enabled: 1
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 72e76810224064300b7d32e8322a5d12, type: 3}
@@ -333,10 +360,8 @@ MonoBehaviour:
   explosionPlayer: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
   explosionEnemy: {fileID: 100012, guid: 384371afbb4354cc9a3fc68eab303756, type: 2}
   scoreValueEnemy: 50
-  sounds: []
-  weapon: {fileID: 0}
-  explosion: {fileID: 0}
   moverEnemyShip: {fileID: 11400002}
+  explosionSoundEffect: {fileID: 100010}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -359,9 +384,6 @@ MonoBehaviour:
   shotSpawn: {fileID: 400000}
   fireRate: 1
   test: 0
-  sounds: []
-  weapon: {fileID: 0}
-  explosion: {fileID: 0}
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1

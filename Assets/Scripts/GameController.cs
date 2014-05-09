@@ -288,7 +288,7 @@ public class GameController : MonoBehaviour
 
 	IEnumerator SpawnWaves()
 	{          
-        instructionsText.text = "left ctrl to fire \narrow keys to move";
+        instructionsText.text = "left ctrl to fire \narrow keys to move\n'p' to pause";
         yield return new WaitForSeconds(instructionTime);
         instructionsText.text = "";
         waveText.text = "Get ready!";

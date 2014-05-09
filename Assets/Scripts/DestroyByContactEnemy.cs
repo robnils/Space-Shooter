@@ -7,12 +7,15 @@ public class DestroyByContactEnemy : MonoBehaviour
 	public GameObject explosionEnemy;
 	public int scoreValueEnemy;
 	private GameController gameController;
-
+    public MoverEnemyShip moverEnemyShip;
+    public GameObject explosionSoundEffect;
     // Sounds
+    /*
     public AudioSource[] sounds;
     public AudioSource weapon;
     public AudioSource explosion;
-    public MoverEnemyShip moverEnemyShip;
+    */
+    
 
 	void Start()
 	{
@@ -27,9 +30,11 @@ public class DestroyByContactEnemy : MonoBehaviour
 			Debug.Log ("Cannot find 'GameController' script");
 
         // Sounds
+        /*
         sounds = GetComponents<AudioSource>();
         weapon = sounds[0];
         explosion = sounds[1]; // At [0] is weapon sound
+         */
 	}
 
 	void OnTriggerEnter(Collider other) 
@@ -72,7 +77,7 @@ public class DestroyByContactEnemy : MonoBehaviour
 
             // Add score
             gameController.AddScore (scoreValueEnemy);
-            explosion.Play();
+            explosionSoundEffect.audio.Play();
 
             // Destroy the bolt and the ship
             Destroy(other.gameObject); 
