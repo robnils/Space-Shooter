@@ -8,6 +8,8 @@ using System.Collections;
  * Add a life system
  * Add more asteroids
  * Consider mesh renderer for asteroids
+ * add a pause button
+ * make asteroids harder, faster - make ships move slower
  */
 
 // Used to spawn hazards
@@ -50,12 +52,34 @@ public class GameController : MonoBehaviour
     public GUIText newHighScoreText;
     public GUIText InstructionsText;
 
+    // Change resolution
+    private float originalWidth = 600.0f;
+    private float originalHeight = 900.0f;
+    private Vector3 scale;
+
     // test
     public GUIText test;
 
     void OnApplicationQuit()
     {
         ResetSpeeds();
+    }
+
+    void OnGUI()
+    {
+        /*
+        scale.x = Screen.width / originalWidth; // calculate hor scale
+        scale.y = Screen.height / originalHeight; // calculate vert scale
+        scale.z = 1;
+        var svMat = GUI.matrix; // save current matrix
+        // substitute matrix - only scale is altered from standard
+        GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, scale);
+        // draw your GUI controls here:
+        //GUI.Box(Rect(10, 10, 200, 50), "Box");
+        //GUI.Button(Rect(400, 180, 230, 50), "Button");
+        //...
+        // restore matrix before returning
+        GUI.matrix = svMat; // restore matrix*/
     }
 
 	void Start()
@@ -257,13 +281,13 @@ public class GameController : MonoBehaviour
                         // Note: we're in a loop so we only want the speed to increase once per wave
                         if (waveCount != 2 && i == 0)
                         {
-                            moverEnemyShip.speed += 0.2f;
+                            moverEnemyShip.speed += 0.1f;
                             moverEnemyShip.fireRate -= 0.01f;
                         }
 
                         // Spawn the ship in one of three invisible rows along the top
                         // and a random horizontal position  along the x axis
-                        int row = Random.Range(0,2)*2; // The vertical row (z axis) they lie on
+                        int row = Random.Range(0,4); // The vertical row (z axis) they lie on
                         float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x); // random position along x axis
                                                 
                         Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z+row));
@@ -288,14 +312,14 @@ public class GameController : MonoBehaviour
                     // Note: we're in a loop so we only want the speed to increase once per wave
                     if (waveCount != 1 && i==0)
                     {
-                        mover.speed -= 0.2f;
+                        mover.speed -= 0.25f;
                     }
 
                     float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x);
 
 					Vector3 spawnPosition = new Vector3 (range, spawnValues.y, spawnValues.z);
 					Quaternion spawnRotation = Quaternion.identity;
-					Instantiate (hazard, spawnPosition, spawnRotation);
+					Instantiate (hazard, spawnPosition, spawnRotation);                    
 					yield return new WaitForSeconds (spawnWait);
 				}
 			}

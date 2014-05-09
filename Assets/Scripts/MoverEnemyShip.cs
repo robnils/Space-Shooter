@@ -82,6 +82,7 @@ public class MoverEnemyShip : MonoBehaviour
 				);
 
 		// Ship movement tilt
-		rigidbody.rotation = Quaternion.Euler(180,0,rigidbody.velocity.x*(-tilt));				
+		rigidbody.rotation = Quaternion.Euler(180,0,rigidbody.velocity.x*(-tilt));
+        //shotSpawn.rotation = Quaternion.Euler(0, 0, 180);
 	}
 }
