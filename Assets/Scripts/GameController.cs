@@ -8,7 +8,7 @@ using System.Collections;
  * Add a life system
  * Add more asteroids
  * Consider mesh renderer for asteroids
- * add a pause button
+ * add a pause button - done! 
  * make asteroids harder, faster - make ships move slower
  */
 
@@ -26,10 +26,12 @@ public class GameController : MonoBehaviour
     public float instructionTime;
 
     // Game data
+    private bool paused;
     private float shipSpeed; // Original peed of enemy ships
     private float shipFireRate; // Original ship fire rate
     private float hazardSpeed; // Original asteroid speed
 
+    float timeScale; // Game timescale - used for (un)pausing
     public float hazardRate;
     private bool restart;
     private bool gameOver;
@@ -50,7 +52,9 @@ public class GameController : MonoBehaviour
     public GUIText highScoreText;
     public GUIText resetHighScoresText;
     public GUIText newHighScoreText;
-    public GUIText InstructionsText;
+    public GUIText instructionsText;
+    public GUIText pausedText;
+    public GameObject pausedObject;
 
     // Change resolution
     private float originalWidth = 600.0f;
@@ -111,7 +115,7 @@ public class GameController : MonoBehaviour
         score = 0;
         highScore = 0;
         waveCount = 1;
-        numberOfEnemyShips = 2;
+        numberOfEnemyShips = 3;
         gameOver = false;
         restart = false;
         restartText.text = "";
@@ -119,6 +123,11 @@ public class GameController : MonoBehaviour
         waveText.text = "";
         newHighScoreText.text = "";
         test.text = "";
+        pausedText.text = "";
+
+        // Pausing
+        paused = false;
+        timeScale = Time.timeScale; // Store current time scale
     }
 
     private void SaveHighScore()
@@ -199,7 +208,7 @@ public class GameController : MonoBehaviour
     private void DisplayResetHighScores()
     {
         resetHighScoresText.color = new Color(0, 234, 255, 255);
-        resetHighScoresText.text = "Press 'P' to reset high score";
+        resetHighScoresText.text = "Press 'T' to reset high score";
     }
 
     // Wait for time seconds
@@ -232,9 +241,14 @@ public class GameController : MonoBehaviour
     // For restarting the game
 	void Update()
 	{      
-        if(Input.GetKeyDown(KeyCode.P))
+        if(Input.GetKeyDown(KeyCode.T))
         {
             ResetHighScore();
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PauseGame();
         }
 
 		if (restart) 
@@ -243,14 +257,40 @@ public class GameController : MonoBehaviour
 			{
 				Application.LoadLevel(Application.loadedLevel); // currently loaded level
 			}
-		}
+		}        
 	}
+
+    private void PauseGame()
+    {      
+        // If not paused, pause
+        if (!paused)
+        {
+            pausedObject.audio.Play();
+            //audio.Stop(); // Pause background music
+            audio.volume = 0.1f;
+            pausedText.text = "Paused";
+            paused = true;
+            Time.timeScale = 0;
+        }
+
+        // Otherwise unpause
+        else if (paused)
+        {
+            pausedObject.audio.Play();
+            //audio.Play(); // Resume background music
+            audio.volume = 0.5f;
+            pausedText.text = "";
+            paused = false;
+            Time.timeScale = timeScale;
+        }
+    }
+
 
 	IEnumerator SpawnWaves()
 	{          
-        InstructionsText.text = "left ctrl to fire \narrow keys to move";
+        instructionsText.text = "left ctrl to fire \narrow keys to move";
         yield return new WaitForSeconds(instructionTime);
-        InstructionsText.text = "";
+        instructionsText.text = "";
         waveText.text = "Get ready!";
         yield return new WaitForSeconds(3);
 
@@ -268,7 +308,7 @@ public class GameController : MonoBehaviour
 			yield return new WaitForSeconds (4);
 			waveText.text = "";
             resetHighScoresText.text = ""; // Hide so "restarttext" can be displayed when needed
-
+            
 			for (int i = 0; i < hazardCount; i++) 
 			{
 				// Spawn enemy ship every second wave
@@ -287,10 +327,11 @@ public class GameController : MonoBehaviour
 
                         // Spawn the ship in one of three invisible rows along the top
                         // and a random horizontal position  along the x axis
-                        int row = Random.Range(0,4); // The vertical row (z axis) they lie on
+                        //int row = Random.Range(0,4); // The vertical row (z axis) they lie on
+                        float rangeZ = Random.Range(0.0f, 5.2f);
                         float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x); // random position along x axis
                                                 
-                        Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z+row));
+                        Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z + rangeZ));
                         Quaternion spawnRotationEnemy = Quaternion.identity;
                         Instantiate(enemyShip, spawnPositionEnemy, spawnRotationEnemy);
                         
@@ -312,7 +353,7 @@ public class GameController : MonoBehaviour
                     // Note: we're in a loop so we only want the speed to increase once per wave
                     if (waveCount != 1 && i==0)
                     {
-                        mover.speed -= 0.25f;
+                        mover.speed -= 0.5f;
                     }
 
                     float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x);
