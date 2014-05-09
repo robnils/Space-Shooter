@@ -118,6 +118,7 @@ MonoBehaviour:
   spawnValues: {x: 6, y: 0, z: 16}
   spawnValuesEnemy: {x: 5.69999981, y: 0, z: 8.5}
   moverEnemyShip: {fileID: 11400002, guid: 73e60971e02b74349942be3f2ce6903b, type: 2}
+  mover: {fileID: 11400000, guid: 58ef6fdbb9faeff4fb7e323d7fec8376, type: 2}
   instructionTime: 4
   hazardRate: 2.5
   hazardCount: 5

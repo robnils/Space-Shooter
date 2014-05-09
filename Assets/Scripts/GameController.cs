@@ -1,25 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+/* PROBLEMS:
+ * At higher waves, asteroid don't appear. They stay up in the background somewhere, clashing possibly.
+ * -- break their interaction
+ * Add a life system
+ */
+
 // Used to spawn hazards
 public class GameController : MonoBehaviour 
 {
-    /* Problems
-     * Ships destroy asteroids and each other and interact with the asteroids
-     * 
-     * */
 	public GameObject hazard;
 	public GameObject enemyShip;
 	public Vector3 spawnValues;
     public Vector3 spawnValuesEnemy;
 
     public MoverEnemyShip moverEnemyShip;
+    public Mover mover;
 
     public float instructionTime;
 
     // Game data
     private float shipSpeed; // Original peed of enemy ships
     private float shipFireRate; // Original ship fire rate
+    private float hazardSpeed; // Original asteroid speed
 
     public float hazardRate;
     private bool restart;
@@ -46,28 +51,21 @@ public class GameController : MonoBehaviour
     // test
     public GUIText test;
 
-	void Start()
-	{
-        Screen.showCursor = false; // Disable mouse cursor
+    void OnApplicationQuit()
+    {
+        ResetSpeeds();
+    }
 
-        // Basic initialisations
-		score = 0;
-        highScore = 0;
-		waveCount = 1;
-        numberOfEnemyShips = 2;
-		gameOver = false;
-		restart = false;
-		restartText.text = "";
-		gameOverText.text = "";
-        newHighScoreText.text = "";
-        shipSpeed = moverEnemyShip.speed; // To stop the speed increasing between sessions
-        shipFireRate = moverEnemyShip.fireRate;
-        //InstructionsText.color = waveText.color;
+	void Start()
+	{       
+        Initialise();
+
+        // Store initial values
+        StoreSpeeds();
 
         // Import high score        
         LoadHighScore();
-        highScoreText.text = "High Score: " + highScore;
-		waveText.text = "";
+        highScoreText.text = "High Score: " + highScore;		
 		UpdateScore();
 
         // Lets user know how to reset high scores
@@ -75,9 +73,27 @@ public class GameController : MonoBehaviour
 
         // Start game
 		StartCoroutine (SpawnWaves ());;
+    }
 
+    // Basic initialisations, to keep Start() tidy
+    private void Initialise()
+    {
+        // Disable mouse cursor
+        Screen.showCursor = false; 
+
+        // Basic initialisations
+        score = 0;
+        highScore = 0;
+        waveCount = 1;
+        numberOfEnemyShips = 2;
+        gameOver = false;
+        restart = false;
+        restartText.text = "";
+        gameOverText.text = "";
+        waveText.text = "";
+        newHighScoreText.text = "";
         test.text = "";
-	}
+    }
 
     private void SaveHighScore()
     {
@@ -89,14 +105,28 @@ public class GameController : MonoBehaviour
         highScore = PlayerPrefs.GetInt("High Score");
     }
 
+    // Store initial speeds
+    // These functions are needed as the speed before games is remembered
+    private void StoreSpeeds()
+    {
+        shipSpeed = moverEnemyShip.speed; 
+        shipFireRate = moverEnemyShip.fireRate;
+        hazardSpeed = mover.speed;
+    }
+
+    // Reinitialises speeds and fire rates
+    private void ResetSpeeds()
+    {
+        moverEnemyShip.speed = shipSpeed;
+        moverEnemyShip.fireRate = shipFireRate;
+        mover.speed = hazardSpeed;
+    }
+
 	public void GameOver()
 	{
         waveText.text = "";
 
-        //Reset enemy ships speed and fire rate
-        moverEnemyShip.speed = shipSpeed;
-        moverEnemyShip.fireRate = shipFireRate;
-
+        ResetSpeeds(); // Reset speeds of ships and asteroids
         // Maybe destroy all objects?
         // ****
 
@@ -121,18 +151,18 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(seconds);
     }
 
-	void UpdateScore()
+	private void UpdateScore()
 	{
 		scoreText.text = "Score: " + score;
 	}
 
-    void UpdateHighScore()
+    private void UpdateHighScore()
     {
         highScoreText.text = "High Score: " + highScore.ToString();
     }
 
     // Resets high score and saves it
-    void ResetHighScore()
+    private void ResetHighScore()
     {
         highScore = 0;
         UpdateHighScore();
@@ -140,10 +170,10 @@ public class GameController : MonoBehaviour
     }
 
     // Block of code that uses the restartText to display resetHighScores instructions
-    void DisplayResetHighScores()
+    private void DisplayResetHighScores()
     {
         resetHighScoresText.color = new Color(0, 234, 255, 255);
-        resetHighScoresText.text = "Press 'P' to reset high scores";
+        resetHighScoresText.text = "Press 'P' to reset high score";
     }
 
     // Wait for time seconds
@@ -222,7 +252,7 @@ public class GameController : MonoBehaviour
                     for (int j = 0; j < numberOfEnemyShips; j++)
                     {
                         // Aside from the first wave, increase difficult (ship speed & fire rate) each wave
-                        if (waveCount != 1)
+                        if (waveCount != 2)
                         {
                             moverEnemyShip.speed += 0.1f;
                             moverEnemyShip.fireRate -= 0.01f;
@@ -250,6 +280,12 @@ public class GameController : MonoBehaviour
                 // Otherwise spawn asteroids
 				else
 				{
+                    // Aside from first wave, increase asteroid difficulty
+                    if (waveCount != 1)
+                    {
+                        mover.speed += 0.1f;
+                    }
+
 					Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 					Quaternion spawnRotation = Quaternion.identity;
 					Instantiate (hazard, spawnPosition, spawnRotation);

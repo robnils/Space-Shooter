@@ -333,6 +333,9 @@ MonoBehaviour:
   explosionPlayer: {fileID: 100008, guid: a93496017806b7740910df5fd946f306, type: 2}
   explosionEnemy: {fileID: 100012, guid: 384371afbb4354cc9a3fc68eab303756, type: 2}
   scoreValueEnemy: 50
+  sounds: []
+  weapon: {fileID: 0}
+  explosion: {fileID: 0}
   moverEnemyShip: {fileID: 11400002}
 --- !u!114 &11400002
 MonoBehaviour:
@@ -345,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0126bf71dd5bed42b63bde7af508670, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4.19999886
+  speed: 3
   tilt: 4
   boundary:
     xMin: -5.80000019
@@ -354,7 +357,7 @@ MonoBehaviour:
     zMax: 13.5
   shot: {fileID: 100002, guid: be6bdf6edccbb8149b9ece399d3caa0d, type: 2}
   shotSpawn: {fileID: 400000}
-  fireRate: .680000126
+  fireRate: .800000012
   test: 0
   sounds: []
   weapon: {fileID: 0}
