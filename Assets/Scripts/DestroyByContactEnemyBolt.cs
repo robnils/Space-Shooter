@@ -11,6 +11,7 @@ public class DestroyByContactEnemyBolt : MonoBehaviour
 
     void Start()
     {
+        // Game controller setup
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
 
         if (gameControllerObject != null)
@@ -20,6 +21,17 @@ public class DestroyByContactEnemyBolt : MonoBehaviour
 
         if (gameControllerObject == null)
             Debug.Log("Cannot find 'GameController' script");
+
+        // Player controller object setup
+        GameObject playerControllerObject = GameObject.FindWithTag("Player");
+
+        if (playerControllerObject != null)
+        {
+            playerController = playerControllerObject.GetComponent<PlayerController>();
+        }
+
+        if (playerControllerObject == null)
+            Debug.Log("Cannot find 'PlayerController' script");
     }
 
     void OnTriggerEnter(Collider other)
@@ -45,14 +57,14 @@ public class DestroyByContactEnemyBolt : MonoBehaviour
             // Destroy bolt and player objects
             Destroy(other.gameObject);
             Destroy(gameObject);
-
+                       
             // End game if out of lives
             if (playerController.lives == 0)
                 gameController.GameOver();
 
             // Otherwise deduct a life
             else
-                --playerController.lives; // Subtract a life
+                playerController.LoseLife(); // Subtract a life
         }
         
         else

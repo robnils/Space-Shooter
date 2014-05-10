@@ -20,6 +20,7 @@ public class DestroyByContactEnemy : MonoBehaviour
 
 	void Start()
 	{
+        // Gamecontroller setup
 		GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
 		
 		if (gameControllerObject != null) 
@@ -29,6 +30,17 @@ public class DestroyByContactEnemy : MonoBehaviour
 		
 		if (gameControllerObject == null)
 			Debug.Log ("Cannot find 'GameController' script");
+
+        // Player controller object setup
+        GameObject playerControllerObject = GameObject.FindWithTag("Player");
+
+        if (playerControllerObject != null)
+        {
+            playerController = playerControllerObject.GetComponent<PlayerController>();
+        }
+
+        if (playerControllerObject == null)
+            Debug.Log("Cannot find 'PlayerController' script");
 
         // Sounds
         /*
@@ -67,7 +79,7 @@ public class DestroyByContactEnemy : MonoBehaviour
 			Instantiate (explosionPlayer, transform.position, transform.rotation);
             Instantiate(explosionEnemy, other.transform.position, other.transform.rotation);
             Destroy(other.gameObject);
-            Destroy(gameObject);
+            Destroy(gameObject);           
 
             // End game if out of lives
             if (playerController.lives == 0)
@@ -75,13 +87,17 @@ public class DestroyByContactEnemy : MonoBehaviour
 
             // Otherwise deduct a life
             else
-                --playerController.lives; // Subtract a life
+                playerController.LoseLife(); // Subtract a life
 		}
 
         else if (other.tag == "Bolt")
         {
             // Destroy ship
             Instantiate(explosionEnemy, other.transform.position, other.transform.rotation);
+
+            // Subtract from total list of enemies
+            --gameController.totalNumberOfEnemies;
+            gameController.test.text = gameController.totalNumberOfEnemies.ToString();
 
             // Add score
             gameController.AddScore (scoreValueEnemy);
@@ -93,6 +109,7 @@ public class DestroyByContactEnemy : MonoBehaviour
             Destroy(gameObject);
         }
         // Try else return to fix asteroid colliding asteroid problem?
+        // -- Update, think making the collider a trigger fixed it
 	}
 
 }

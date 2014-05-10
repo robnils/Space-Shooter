@@ -32,6 +32,8 @@ public class GameController : MonoBehaviour
     private float shipFireRate; // Original ship fire rate
     private float hazardSpeed; // Original asteroid speed
 
+    public int totalNumberOfEnemies; // keeps track of number of enemies
+
     float timeScale; // Game timescale - used for (un)pausing
     public float hazardRate;
     private bool restart;
@@ -56,7 +58,7 @@ public class GameController : MonoBehaviour
     public GUIText instructionsText;
     public GUIText pausedText;
     public GameObject pausedObject;
-    public GameObject lives; // Lives icon in the corner
+    public GameObject livesObject; // Lives icon in the corner
 
     // Change resolution
     private float originalWidth = 600.0f;
@@ -122,11 +124,13 @@ public class GameController : MonoBehaviour
     // Initialise number oflives
     public void SetUpLives()
     {
+        playerController.SetUpLives();
+        /*
         for (int i = 0; i < playerController.lives; i++)
         {
             Vector3 lifePosition = new Vector3(12.2f - i*1.3f, 0.0f, -4.0f);
-            Instantiate(lives, lifePosition, Quaternion.identity);
-        }
+            Instantiate(livesObject, lifePosition, Quaternion.identity);
+        }*/
     }
 
     // Basic initialisations, to keep Start() tidy
@@ -348,8 +352,10 @@ public class GameController : MonoBehaviour
 
     }
 
-	IEnumerator SpawnWaves()
+	public IEnumerator SpawnWaves()
 	{
+        totalNumberOfEnemies = 0;
+
         // If the user just started a game, display instructions
         if (newGame)
         {
@@ -369,7 +375,7 @@ public class GameController : MonoBehaviour
         }
 
         newGame = false;
-
+        
         // Spawn waves while gameOver is false
 		while(!gameOver)
 		{
@@ -390,8 +396,11 @@ public class GameController : MonoBehaviour
                         // Note: we're in a loop so we only want the speed to increase once per wave
                         if (waveCount != 2 && i == 0)
                         {
-                            moverEnemyShip.speed += 0.1f;
-                            moverEnemyShip.fireRate -= 0.01f;
+                            if(moverEnemyShip.speed <= 15)
+                                moverEnemyShip.speed += 0.12f;
+
+                            if (moverEnemyShip.fireRate >= 0.4)
+                                moverEnemyShip.fireRate -= 0.01f;
                         }
 
                         // Spawn the ship in one of three invisible rows along the top
@@ -403,14 +412,15 @@ public class GameController : MonoBehaviour
                         Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z + rangeZ));
                         Quaternion spawnRotationEnemy = Quaternion.identity;
                         Instantiate(enemyShip, spawnPositionEnemy, spawnRotationEnemy);
-                        
-                        /* if (spawn on location as other enemy)
-                         * delete, spawn new location 
-                         * maybe while loop?
-                         * */
+                        totalNumberOfEnemies++;  
                     }
-                    numberOfEnemyShips++;
-                    yield return new WaitForSeconds(spawnWait);
+
+                    // Make a good bit harder every 5 waves
+                    if (waveCount % 5 == 0)
+                        numberOfEnemyShips += 3; 
+
+                    numberOfEnemyShips++;                    
+                    //yield return new WaitForSeconds(spawnWait);
                     break;					
 				}
 
@@ -422,22 +432,43 @@ public class GameController : MonoBehaviour
                     // Note: we're in a loop so we only want the speed to increase once per wave
                     if (waveCount != 1 && i==0)
                     {
-                        mover.speed -= 0.5f;
+                        if (mover.speed <= -20)
+                            mover.speed -= 0.5f;
+                        
+                        if(spawnWait > 0.3f)
+                            spawnWait -= 0.02f;
                     }
 
                     float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x);
 
 					Vector3 spawnPosition = new Vector3 (range, spawnValues.y, spawnValues.z);
 					Quaternion spawnRotation = Quaternion.identity;
-					Instantiate (hazard, spawnPosition, spawnRotation);                    
+					Instantiate (hazard, spawnPosition, spawnRotation);
+                    totalNumberOfEnemies++;
+
 					yield return new WaitForSeconds (spawnWait);
 				}
 			}
-
+            
 			waveCount++;
-            waveWait += 0.2f; // Increase time between waves each wave
-            hazardCount = hazardCount + 3; // add more hazards each wave
-			yield return new WaitForSeconds (waveWait);
+            hazardCount = hazardCount + 5; // add more hazards each wave
+
+            
+            bool enemiesDeadTest = true;
+            while (test)
+            {
+                test.text = totalNumberOfEnemies.ToString();
+                yield return new WaitForSeconds(0.01f);
+                if (totalNumberOfEnemies == 0)
+                {
+                    enemiesDeadTest = false;
+                    break;
+                }
+            }
+
+            //waveWait += 0.1f; // Increase time between waves each wave            
+			//yield return new WaitForSeconds (waveWait);
+
 		}
 	}
 }

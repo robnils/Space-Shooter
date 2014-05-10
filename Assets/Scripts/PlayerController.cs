@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     // Powerup Mode
     public bool powerUpOn;
+    public GameObject player;
     public GameObject shotLeft;
     public GameObject shotRight;
     public Transform shotSpawnLeft;
@@ -32,6 +33,12 @@ public class PlayerController : MonoBehaviour
     public GameObject powerupMusic;
     public GameObject powerupSoundEffect;
     public GameObject powerupWeapon;
+
+    public GameController gameController;
+
+    public GameObject livesObject;
+    private GameObject[] livesObjectArray;
+
     public GUIText poweredUpText;
     private bool firstTime;
     //public GameController gameController;
@@ -43,6 +50,18 @@ public class PlayerController : MonoBehaviour
         powerUpOn = false;
         firstTime = true;
         lives = 3;
+
+        // Game controller object set up
+        GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+
+        if (gameControllerObject != null)
+        {
+            gameController = gameControllerObject.GetComponent<GameController>();
+        }
+
+        if (gameControllerObject == null)
+            Debug.Log("Cannot find 'GameController' script");
+        
     }
 	public void Update()
 	{
@@ -72,13 +91,36 @@ public class PlayerController : MonoBehaviour
                 {
                     PowerupMode();
                 }
+
                 nextFire = Time.time + fireRate;
                 PowerUpMultipleBolts();
-                
             }
 		}
-
 	}
+
+    // Setup up lives
+    public void SetUpLives()
+    {
+        livesObjectArray = new GameObject[lives];
+        for (int i = 0; i < lives; i++)
+        {
+            Vector3 lifePosition = new Vector3(12.2f - i*1.3f, 0.0f, -4.0f);            
+            livesObjectArray[i] = (GameObject)Instantiate(livesObject, lifePosition, Quaternion.identity);            
+        }
+    }
+
+    // What to do when a player loses his life
+    public void LoseLife()
+    {
+        --lives;        
+        //int remainingLives = livesObjectArray.Length;
+        //Destroy(livesObjectArray[remainingLives - 1]);
+        Destroy(livesObjectArray[lives]);
+
+        Instantiate(player, player.transform.position, player.transform.rotation);
+        // Restart the wave
+        // StartCoroutine(gameController.SpawnWaves());     // doesnt really work
+    }
 
     // Sets up power up mode
     private void PowerupMode()

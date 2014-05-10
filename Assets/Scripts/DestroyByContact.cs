@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//[System.Serializable]
 public class DestroyByContact : MonoBehaviour 
 {
 	public GameObject explosion;
@@ -11,6 +12,7 @@ public class DestroyByContact : MonoBehaviour
 
 	void Start()
 	{
+        // Game controller object set up
 		GameObject gameControllerObject = GameObject.FindWithTag ("GameController");
 
 		if (gameControllerObject != null) 
@@ -20,8 +22,23 @@ public class DestroyByContact : MonoBehaviour
 
 		if (gameControllerObject == null)
 			Debug.Log ("Cannot find 'GameController' script");
+
+        // Player controller object setup
+        GameObject playerControllerObject = GameObject.FindWithTag("Player");
+
+        if (playerControllerObject != null)
+        {
+            playerController = playerControllerObject.GetComponent<PlayerController>();
+        }
+
+        if (playerControllerObject == null)
+            Debug.Log("Cannot find 'PlayerController' script");
+
+        //GameObject playerControllerObject = GameObject.Find("Player");
+        //playerController = (PlayerController)playerControllerObject.GetComponent(typeof(PlayerController));
 	}
 
+    // For asteroid collisions
 	void OnTriggerEnter(Collider other) 
 	{
 		if (other.tag == "Boundary")
@@ -45,7 +62,7 @@ public class DestroyByContact : MonoBehaviour
             Instantiate(explosionPlayer, transform.position, transform.rotation);
             Instantiate(explosion, other.transform.position, other.transform.rotation);
             Destroy(gameObject);
-            Destroy(other.gameObject);
+            Destroy(other.gameObject);            
 
             // End game if out of lives
             if (playerController.lives == 0)
@@ -53,7 +70,9 @@ public class DestroyByContact : MonoBehaviour
 
             // Otherwise deduct a life
             else
-                --playerController.lives; // Subtract a life
+            {
+                playerController.LoseLife(); // Subtract a life
+            }
             
         }
 
@@ -64,6 +83,10 @@ public class DestroyByContact : MonoBehaviour
 
             // Add score
             gameController.AddScore(scoreValue);
+
+            // Subtract from total list of enemies
+            --gameController.totalNumberOfEnemies;
+            gameController.test.text = gameController.totalNumberOfEnemies.ToString();
             
             Destroy(other.gameObject); // Destroy colliding object
             Destroy(gameObject); // Destroy asteroid
