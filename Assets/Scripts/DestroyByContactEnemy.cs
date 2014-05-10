@@ -71,19 +71,23 @@ public class DestroyByContactEnemy : MonoBehaviour
         }
 
 		// If ship collides with player
+        // Currently set up so this doesn't happen
 		if (other.tag == "Player") 
 		{
-            // Subtract lives
-
             // Display explosions and destroy ship and player
 			Instantiate (explosionPlayer, transform.position, transform.rotation);
             Instantiate(explosionEnemy, other.transform.position, other.transform.rotation);
-            Destroy(other.gameObject);
-            Destroy(gameObject);           
+            //Destroy(other.gameObject);
+            Destroy(gameObject);
+
+            Debug.Log("Ship apparently collided with enemy ship - bug!");
 
             // End game if out of lives
             if (playerController.lives == 0)
+            {
+                Destroy(other.gameObject);
                 gameController.GameOver();
+            }
 
             // Otherwise deduct a life
             else
@@ -95,10 +99,6 @@ public class DestroyByContactEnemy : MonoBehaviour
             // Destroy ship
             Instantiate(explosionEnemy, other.transform.position, other.transform.rotation);
 
-            // Subtract from total list of enemies
-            --gameController.totalNumberOfEnemies;
-            gameController.test.text = gameController.totalNumberOfEnemies.ToString();
-
             // Add score
             gameController.AddScore (scoreValueEnemy);
             explosionSoundEffect.audio.Play();
@@ -107,6 +107,11 @@ public class DestroyByContactEnemy : MonoBehaviour
             // Destroy the bolt and the ship
             Destroy(other.gameObject); 
             Destroy(gameObject);
+
+            // Subtract from total list of enemies
+            --gameController.totalNumberOfEnemies;
+
+            gameController.test.text = gameController.totalNumberOfEnemies.ToString();
         }
         // Try else return to fix asteroid colliding asteroid problem?
         // -- Update, think making the collider a trigger fixed it

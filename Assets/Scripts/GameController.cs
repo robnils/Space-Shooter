@@ -154,6 +154,9 @@ public class GameController : MonoBehaviour
         pausedText.text = "";
         newGame = true;
 
+        // Tests
+        test.enabled = false;
+
         // Pausing
         paused = false;
         timeScale = Time.timeScale; // Store current time scale
@@ -419,7 +422,8 @@ public class GameController : MonoBehaviour
                     if (waveCount % 5 == 0)
                         numberOfEnemyShips += 3; 
 
-                    numberOfEnemyShips++;                    
+                    numberOfEnemyShips++;
+                    test.text = totalNumberOfEnemies.ToString();
                     //yield return new WaitForSeconds(spawnWait);
                     break;					
 				}
@@ -445,6 +449,7 @@ public class GameController : MonoBehaviour
 					Quaternion spawnRotation = Quaternion.identity;
 					Instantiate (hazard, spawnPosition, spawnRotation);
                     totalNumberOfEnemies++;
+                    test.text = totalNumberOfEnemies.ToString();
 
 					yield return new WaitForSeconds (spawnWait);
 				}
@@ -452,8 +457,7 @@ public class GameController : MonoBehaviour
             
 			waveCount++;
             hazardCount = hazardCount + 5; // add more hazards each wave
-
-            
+            /*
             bool enemiesDeadTest = true;
             while (test)
             {
@@ -465,9 +469,9 @@ public class GameController : MonoBehaviour
                     break;
                 }
             }
-
-            //waveWait += 0.1f; // Increase time between waves each wave            
-			//yield return new WaitForSeconds (waveWait);
+            */
+            waveWait += 0.1f; // Increase time between waves each wave            
+			yield return new WaitForSeconds (waveWait);
 
 		}
 	}

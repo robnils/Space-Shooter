@@ -48,19 +48,24 @@ public class DestroyByContactEnemyBolt : MonoBehaviour
         if (other.tag == "Bolt")
             return;
 
-        // If ship collides with player
+        // If bolt collides with player
         if (other.tag == "Player")
         {
             // Player explosion
             Instantiate(explosionPlayer, transform.position, transform.rotation);
 
             // Destroy bolt and player objects
-            Destroy(other.gameObject);
+            //Destroy(other.gameObject);
             Destroy(gameObject);
-                       
+
+            Debug.Log("bolt hit player,# of lives is: " + playerController.lives);
+
             // End game if out of lives
             if (playerController.lives == 0)
+            {
+                Destroy(other.gameObject);
                 gameController.GameOver();
+            }
 
             // Otherwise deduct a life
             else

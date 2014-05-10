@@ -62,11 +62,14 @@ public class DestroyByContact : MonoBehaviour
             Instantiate(explosionPlayer, transform.position, transform.rotation);
             Instantiate(explosion, other.transform.position, other.transform.rotation);
             Destroy(gameObject);
-            Destroy(other.gameObject);            
+            //Destroy(other.gameObject);            
 
             // End game if out of lives
             if (playerController.lives == 0)
+            {
+                Destroy(other.gameObject); 
                 gameController.GameOver();
+            }
 
             // Otherwise deduct a life
             else

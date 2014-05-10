@@ -116,8 +116,11 @@ public class PlayerController : MonoBehaviour
         //int remainingLives = livesObjectArray.Length;
         //Destroy(livesObjectArray[remainingLives - 1]);
         Destroy(livesObjectArray[lives]);
+        Debug.Log(livesObjectArray.Length.ToString());
 
-        Instantiate(player, player.transform.position, player.transform.rotation);
+        //Instantiate(player, player.transform.position, player.transform.rotation);        
+        transform.position = new Vector3(0.0f, 0.0f, 0.0f); // Reset position
+
         // Restart the wave
         // StartCoroutine(gameController.SpawnWaves());     // doesnt really work
     }
@@ -130,6 +133,7 @@ public class PlayerController : MonoBehaviour
         backgroundMusic.audio.Stop();
         powerupSoundEffect.audio.Play();
         StartCoroutine(PoweredUpText());
+
         // Trigger the event only one
         firstTime = false;
         fireRate -= 0.05f; // Fire faster
