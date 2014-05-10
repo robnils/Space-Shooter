@@ -3,13 +3,12 @@ using System.Collections;
 
 
 /* PROBLEMS:
- * At higher waves, asteroid don't appear. They stay up in the background somewhere, clashing possibly.
- * -- break their interaction
+ * Enemy ship explosion
  * Add a life system
- * Add more asteroids
+ * Add more asteroids - done! 
  * Consider mesh renderer for asteroids
  * add a pause button - done! 
- * make asteroids harder, faster - make ships move slower
+ * make asteroids harder, faster - make ships move slower - done!
  */
 
 // Used to spawn hazards
