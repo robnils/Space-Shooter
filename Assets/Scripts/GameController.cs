@@ -9,6 +9,14 @@ using System.Collections;
  * Consider mesh renderer for asteroids
  * add a pause button - done! 
  * make asteroids harder, faster - make ships move slower - done!
+ * 
+ * make powerup a temporary bonus
+ * weapon ideas: full laser beam
+ * diagonal asteroids
+ * asteroids from the sides/bottom 
+ * 
+ * 
+ * 10 waves - mother ship, shots missiles, spawns tons of small ships
  */
 
 // Used to spawn hazards
@@ -45,6 +53,7 @@ public class GameController : MonoBehaviour
 	public float waveWait;	// Time between waves
 	private int score;
     private int highScore;
+    private int highestWave;
 	private int waveCount; // Keeps track of number of waves
     
     // Display
@@ -53,10 +62,12 @@ public class GameController : MonoBehaviour
 	public GUIText restartText;
 	public GUIText waveText;
     public GUIText highScoreText;
+    public GUIText highestWaveText;
     public GUIText resetHighScoresText;
     public GUIText newHighScoreText;
     public GUIText instructionsText;
     public GUIText pausedText;
+    public GUIText newHighestWaveText;
     public GameObject pausedObject;
     public GameObject livesObject; // Lives icon in the corner
 
@@ -106,9 +117,11 @@ public class GameController : MonoBehaviour
         // Store initial values
         StoreSpeeds();
 
-        // Import high score        
+        // Import high score and wave
         LoadHighScore();
+        LoadHighestWave();
         highScoreText.text = "High Score: " + highScore;		
+        UpdateHighestWave();
 		UpdateScore();
 
         // Lets user know how to reset high scores
@@ -142,6 +155,7 @@ public class GameController : MonoBehaviour
         // Basic initialisations
         score = 0;
         highScore = 0;
+        highestWave = 0;
         waveCount = 1;
         numberOfEnemyShips = 3;
         gameOver = false;
@@ -152,7 +166,11 @@ public class GameController : MonoBehaviour
         newHighScoreText.text = "";
         test.text = "";
         pausedText.text = "";
+        newHighestWaveText.text = "";
         newGame = true;
+
+        // For diagonal asteroids, set to true
+        mover.diagonal = false;
 
         // Tests
         test.enabled = false;
@@ -162,9 +180,20 @@ public class GameController : MonoBehaviour
         timeScale = Time.timeScale; // Store current time scale
     }
 
+    // Save highest score
     private void SaveHighScore()
     {
         PlayerPrefs.SetInt("High Score", highScore);
+    }
+
+    private void SaveHighestWave()
+    {
+        PlayerPrefs.SetInt("Highest Wave", highestWave);
+    }
+
+    private void LoadHighestWave()
+    {
+        highestWave = PlayerPrefs.GetInt("Highest Wave");
     }
 
     private void LoadHighScore()
@@ -203,15 +232,26 @@ public class GameController : MonoBehaviour
 
         if (score > highScore)
         { 
-            // Print NEW HIGH SCORE!
-            highScore = score;
-            UpdateHighScore();
+            highScore = score;            
+            UpdateHighScore();           
             SaveHighScore();// Save high score
-
+           
             newHighScoreText.color = new Color(209, 0, 255, 255);
             newHighScoreText.text = "New High Score!";
             WaitSecs(5.0f);
         }
+
+        if(waveCount > highestWave)
+        {
+            highestWave = waveCount;
+            UpdateHighestWave();
+            SaveHighestWave();
+
+            newHighestWaveText.color = new Color(209, 0, 255, 255);
+            newHighestWaveText.text = "New Highest Wave!";
+            WaitSecs(5.0f);
+        }
+
         gameOverText.color = new Color(238, 0, 0, 255);
 		gameOverText.text = "Game Over";        
 		gameOver = true;
@@ -232,6 +272,11 @@ public class GameController : MonoBehaviour
         highScoreText.text = "High Score: " + highScore.ToString();
     }
 
+    private void UpdateHighestWave()
+    {
+        highestWaveText.text = "Highest Wave: " + highestWave.ToString();
+    }
+
     // Resets high score and saves it
     private void ResetHighScore()
     {
@@ -244,7 +289,7 @@ public class GameController : MonoBehaviour
     private void DisplayResetHighScores()
     {
         resetHighScoresText.color = new Color(0, 234, 255, 255);
-        resetHighScoresText.text = "Press 'T' to reset high score";
+        resetHighScoresText.text = "Press 'L' to reset high score";
     }
 
     // Wait for time seconds
@@ -278,13 +323,13 @@ public class GameController : MonoBehaviour
 	void Update()
 	{      
         // Reset high score
-        if(Input.GetKeyDown(KeyCode.T))
+        if(Input.GetKeyDown(KeyCode.L))
         {
             ResetHighScore();
         }
 
         // Pause game
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             PauseGame();
         }
@@ -362,10 +407,10 @@ public class GameController : MonoBehaviour
         // If the user just started a game, display instructions
         if (newGame)
         {
-            instructionsText.text = "left ctrl to fire \narrow keys to move\n'p' to pause";
+            instructionsText.text = "left ctrl to fire \narrow keys to move\n'space' to pause";
             yield return new WaitForSeconds(instructionTime);
             instructionsText.text = "";
-            waveText.text = "Get ready!";
+            waveText.text = "Survive as long \nas you can!";
             yield return new WaitForSeconds(3);
 
             int waitTime = (int)(startWait - (instructionTime + 3));
@@ -436,11 +481,21 @@ public class GameController : MonoBehaviour
                     // Note: we're in a loop so we only want the speed to increase once per wave
                     if (waveCount != 1 && i==0)
                     {
-                        if (mover.speed <= -20)
+                        if (mover.speed <= -30)
                             mover.speed -= 0.5f;
                         
                         if(spawnWait > 0.3f)
                             spawnWait -= 0.02f;
+                    }
+
+                    // For waves larger than 10 make some asteroids diagonally
+                    if (waveCount >= 10)
+                    {
+                        if (Random.Range(0, 2) == 0)                        
+                            mover.diagonal = true;
+
+                        else
+                            mover.diagonal = false;
                     }
 
                     float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x);

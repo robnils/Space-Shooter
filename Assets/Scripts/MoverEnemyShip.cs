@@ -24,15 +24,14 @@ public class MoverEnemyShip : MonoBehaviour
 
 	void Start()
 	{
+        // Speed keeps reassigning itself in inspector to 0
+        fireRate = 0.8f;
+        speed = 3.0f;
 		// Transform.forward is the local x-axis
         // Give each ship a slightly different speed
         rigidbody.velocity = transform.right * (speed + Random.Range(-1.0f, 1.0f));
 		movement = rigidbody.velocity; // save starting velocity
         rigidbody.rotation = Quaternion.Euler(180, 0, 0);
-
-        // Speed keeps reassigning itself in inspector to 0
-        fireRate = 0.8f;
-        speed = 3.0f;
 
         // Sounds
         nextFire = 1; // Wait one second before firing

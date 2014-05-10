@@ -117,7 +117,7 @@ MonoBehaviour:
   enemyShip: {fileID: 100008, guid: 73e60971e02b74349942be3f2ce6903b, type: 2}
   spawnValues: {x: 12.5, y: 0, z: 16}
   spawnValuesEnemy: {x: 12.5, y: 0, z: 8.5}
-  moverEnemyShip: {fileID: 11400002, guid: 73e60971e02b74349942be3f2ce6903b, type: 2}
+  moverEnemyShip: {fileID: 11400002, guid: 9a7e6292e78369c40942b297e6fc5dfd, type: 2}
   mover: {fileID: 11400000, guid: 58ef6fdbb9faeff4fb7e323d7fec8376, type: 2}
   playerController: {fileID: 1430339273}
   instructionTime: 4
@@ -131,11 +131,13 @@ MonoBehaviour:
   gameOverText: {fileID: 1078566949}
   restartText: {fileID: 1087677939}
   waveText: {fileID: 754205051}
-  highScoreText: {fileID: 913896892}
+  highScoreText: {fileID: 2048356639}
+  highestWaveText: {fileID: 913896892}
   resetHighScoresText: {fileID: 739513812}
   newHighScoreText: {fileID: 1935633863}
   instructionsText: {fileID: 1565992928}
   pausedText: {fileID: 355246358}
+  newHighestWaveText: {fileID: 768370001}
   pausedObject: {fileID: 507770063}
   livesObject: {fileID: 0}
   powerupMusic: {fileID: 961012871}
@@ -457,6 +459,8 @@ Transform:
   - {fileID: 2047566295}
   - {fileID: 1810026763}
   - {fileID: 754205052}
+  - {fileID: 768370000}
+  - {fileID: 2048356640}
   m_Father: {fileID: 0}
 --- !u!1 &233094105
 GameObject:
@@ -3497,6 +3501,57 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 222440701}
+--- !u!1 &768369999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100022, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 768370000}
+  - 132: {fileID: 768370001}
+  m_Layer: 0
+  m_Name: NewHighestWaveText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &768370000
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400022, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 768369999}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .5, y: .550000012, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 222440701}
+--- !u!132 &768370001
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 13200018, guid: 07de24d1e108a314597bd45ad0d1acc9,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 768369999}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: NewHighScoreText
+  m_Anchor: 4
+  m_Alignment: 1
+  m_PixelOffset: {x: 0, y: -70}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 12800000, guid: b166fd45e2cc73b4a9e5ce669e9608d6, type: 3}
+  m_Material: {fileID: 0}
+  m_FontSize: 30
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4293825792
+  m_PixelCorrect: 1
+  m_RichText: 1
 --- !u!1 &777634051
 GameObject:
   m_ObjectHideFlags: 0
@@ -4817,7 +4872,7 @@ GameObject:
   - 4: {fileID: 913896893}
   - 132: {fileID: 913896892}
   m_Layer: 0
-  m_Name: High Score
+  m_Name: 'Highest Wave:'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4832,10 +4887,10 @@ GUIText:
   m_GameObject: {fileID: 913896891}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: High Score
+  m_Text: 'Highest Wave: 0'
   m_Anchor: 0
   m_Alignment: 0
-  m_PixelOffset: {x: 10, y: -30}
+  m_PixelOffset: {x: 10, y: -50}
   m_LineSpacing: 1
   m_TabSize: 4
   m_Font: {fileID: 12800000, guid: b166fd45e2cc73b4a9e5ce669e9608d6, type: 3}
@@ -6533,9 +6588,9 @@ GUIText:
     type: 2}
   m_PrefabInternal: {fileID: 2032115612}
   m_GameObject: {fileID: 1334197068}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
-  m_Text: 
+  m_Text: Powered Up!
   m_Anchor: 6
   m_Alignment: 1
   m_PixelOffset: {x: 0, y: 0}
@@ -7294,7 +7349,7 @@ GUIText:
   m_Text: NewHighScoreText
   m_Anchor: 4
   m_Alignment: 1
-  m_PixelOffset: {x: 0, y: 0}
+  m_PixelOffset: {x: 0, y: -30}
   m_LineSpacing: 1
   m_TabSize: 4
   m_Font: {fileID: 12800000, guid: b166fd45e2cc73b4a9e5ce669e9608d6, type: 3}
@@ -7431,6 +7486,22 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+      propertyPath: m_Name
+      value: 'Highest Wave:'
+      objectReference: {fileID: 0}
+    - target: {fileID: 13200006, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+      propertyPath: m_Text
+      value: 'Highest Wave: 0'
+      objectReference: {fileID: 0}
+    - target: {fileID: 13200006, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+      propertyPath: m_PixelOffset.y
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 13200018, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+      propertyPath: m_PixelOffset.y
+      value: -30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
   m_RootGameObject: {fileID: 222440700}
@@ -7482,6 +7553,57 @@ Transform:
   m_PrefabParentObject: {fileID: 400024, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
   m_PrefabInternal: {fileID: 2032115612}
   m_GameObject: {fileID: 2047566293}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 222440701}
+--- !u!1 &2048356638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100010, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2048356640}
+  - 132: {fileID: 2048356639}
+  m_Layer: 0
+  m_Name: High Score
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!132 &2048356639
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 13200006, guid: 07de24d1e108a314597bd45ad0d1acc9,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2048356638}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: High Score
+  m_Anchor: 0
+  m_Alignment: 0
+  m_PixelOffset: {x: 10, y: -30}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 12800000, guid: b166fd45e2cc73b4a9e5ce669e9608d6, type: 3}
+  m_Material: {fileID: 0}
+  m_FontSize: 16
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_PixelCorrect: 1
+  m_RichText: 1
+--- !u!4 &2048356640
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400010, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2048356638}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
