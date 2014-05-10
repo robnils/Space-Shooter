@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour
 
     public MoverEnemyShip moverEnemyShip;
     public Mover mover;
+    public PlayerController playerController;
 
     public float instructionTime;
 
@@ -54,12 +55,18 @@ public class GameController : MonoBehaviour
     public GUIText newHighScoreText;
     public GUIText instructionsText;
     public GUIText pausedText;
+    public GUIText poweredUpText;
     public GameObject pausedObject;
 
     // Change resolution
     private float originalWidth = 600.0f;
     private float originalHeight = 900.0f;
     private Vector3 scale;
+
+    // Powerup
+    public GameObject powerupMusic;
+    public GameObject powerupSoundEffect;
+    public GameObject backgroundMusic;
 
     // test
     public GUIText test;
@@ -103,6 +110,9 @@ public class GameController : MonoBehaviour
 
         // Start game
 		StartCoroutine (SpawnWaves ());;
+
+        // Play background music
+        backgroundMusic.audio.Play();
     }
 
     // Basic initialisations, to keep Start() tidy
@@ -124,6 +134,7 @@ public class GameController : MonoBehaviour
         newHighScoreText.text = "";
         test.text = "";
         pausedText.text = "";
+        poweredUpText.text = "";
 
         // Pausing
         paused = false;
@@ -257,8 +268,32 @@ public class GameController : MonoBehaviour
 			{
 				Application.LoadLevel(Application.loadedLevel); // currently loaded level
 			}
-		}        
+		}
+
+        if (score >= 10)
+        {
+            PowerupMultipleBolts();
+        }
 	}
+
+    // Sets things up for powerup mode
+    private void PowerupMultipleBolts()
+    {
+        playerController.powerUpOn = true;
+       
+        /*** Legacy Code ****/
+        //powerupSoundEffect.audio.Play();
+        //backgroundMusic.audio.Stop();
+        //playerController.Update();
+        //backgroundMusic.audio.Stop();
+        //audio.Stop();
+        // Destroy(backgroundMusic.audio);
+        //backgroundMusic.audio.clip = powerupMusic.audio.clip;
+        //backgroundMusic.audio.Play();
+        //powerupSoundEffect.audio.Play();
+        //powerupMusic.audio.Play();
+    }
+
 
     private void PauseGame()
     {      
@@ -267,7 +302,7 @@ public class GameController : MonoBehaviour
         {
             pausedObject.audio.Play();
             //audio.Stop(); // Pause background music
-            audio.volume = 0.1f;
+            backgroundMusic.audio.volume = 0.1f;
             pausedText.text = "Paused";
             paused = true;
             Time.timeScale = 0;
@@ -278,13 +313,12 @@ public class GameController : MonoBehaviour
         {
             pausedObject.audio.Play();
             //audio.Play(); // Resume background music
-            audio.volume = 0.5f;
+            backgroundMusic.audio.volume = 0.5f;
             pausedText.text = "";
             paused = false;
             Time.timeScale = timeScale;
         }
     }
-
 
 	IEnumerator SpawnWaves()
 	{          
