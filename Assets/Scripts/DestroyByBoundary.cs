@@ -19,7 +19,7 @@ public class DestroyByBoundary : MonoBehaviour
         if (gameControllerObject == null)
             Debug.Log("Cannot find 'GameController' script");
 
-        // Destroy leaving oject
+        // Destroy leaving object
 		Destroy(other.gameObject);
 
         // Subtract from total list of enemies
