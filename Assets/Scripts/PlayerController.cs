@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     public float fireRate;
     private float nextFire;
 
+    public int lives; 
+
     // Powerup Mode
     public bool powerUpOn;
     public GameObject shotLeft;
@@ -40,6 +42,7 @@ public class PlayerController : MonoBehaviour
     {
         powerUpOn = false;
         firstTime = true;
+        lives = 3;
     }
 	public void Update()
 	{

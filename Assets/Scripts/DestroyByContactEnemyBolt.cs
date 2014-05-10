@@ -7,6 +7,7 @@ public class DestroyByContactEnemyBolt : MonoBehaviour
     public GameObject explosionPlayer;
     public GameObject explosionEnemy;
     private GameController gameController;
+    public PlayerController playerController;
 
     void Start()
     {
@@ -45,8 +46,13 @@ public class DestroyByContactEnemyBolt : MonoBehaviour
             Destroy(other.gameObject);
             Destroy(gameObject);
 
-            // End the game
-            gameController.GameOver();
+            // End game if out of lives
+            if (playerController.lives == 0)
+                gameController.GameOver();
+
+            // Otherwise deduct a life
+            else
+                --playerController.lives; // Subtract a life
         }
         
         else

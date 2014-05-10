@@ -9,6 +9,7 @@ public class DestroyByContactEnemy : MonoBehaviour
 	private GameController gameController;
     public MoverEnemyShip moverEnemyShip;
     public GameObject explosionSoundEffect;
+    public PlayerController playerController;
     // Sounds
     /*
     public AudioSource[] sounds;
@@ -60,14 +61,21 @@ public class DestroyByContactEnemy : MonoBehaviour
 		// If ship collides with player
 		if (other.tag == "Player") 
 		{
+            // Subtract lives
+
             // Display explosions and destroy ship and player
 			Instantiate (explosionPlayer, transform.position, transform.rotation);
             Instantiate(explosionEnemy, other.transform.position, other.transform.rotation);
             Destroy(other.gameObject);
             Destroy(gameObject);
 
-            // End game
-			gameController.GameOver();
+            // End game if out of lives
+            if (playerController.lives == 0)
+                gameController.GameOver();
+
+            // Otherwise deduct a life
+            else
+                --playerController.lives; // Subtract a life
 		}
 
         else if (other.tag == "Bolt")

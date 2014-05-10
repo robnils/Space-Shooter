@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour
     public PlayerController playerController;
 
     public float instructionTime;
+    private bool newGame;
 
     // Game data
     private bool paused;
@@ -55,6 +56,7 @@ public class GameController : MonoBehaviour
     public GUIText instructionsText;
     public GUIText pausedText;
     public GameObject pausedObject;
+    public GameObject lives; // Lives icon in the corner
 
     // Change resolution
     private float originalWidth = 600.0f;
@@ -93,7 +95,11 @@ public class GameController : MonoBehaviour
 
 	void Start()
 	{       
+        // Basic initialisations
         Initialise();
+
+        // Set up lives
+        SetUpLives();
 
         // Store initial values
         StoreSpeeds();
@@ -111,6 +117,16 @@ public class GameController : MonoBehaviour
 
         // Play background music
         backgroundMusic.audio.Play();
+    }
+
+    // Initialise number oflives
+    public void SetUpLives()
+    {
+        for (int i = 0; i < playerController.lives; i++)
+        {
+            Vector3 lifePosition = new Vector3(12.2f - i*1.3f, 0.0f, -4.0f);
+            Instantiate(lives, lifePosition, Quaternion.identity);
+        }
     }
 
     // Basic initialisations, to keep Start() tidy
@@ -132,6 +148,7 @@ public class GameController : MonoBehaviour
         newHighScoreText.text = "";
         test.text = "";
         pausedText.text = "";
+        newGame = true;
 
         // Pausing
         paused = false;
@@ -250,19 +267,22 @@ public class GameController : MonoBehaviour
 		UpdateScore ();
 	}
 
-    // For restarting the game
+    // For updating the game
 	void Update()
 	{      
+        // Reset high score
         if(Input.GetKeyDown(KeyCode.T))
         {
             ResetHighScore();
         }
 
+        // Pause game
         if (Input.GetKeyDown(KeyCode.P))
         {
             PauseGame();
         }
 
+        // Restart game 
 		if (restart) 
 		{
 			if(Input.GetKeyDown(KeyCode.R))
@@ -271,6 +291,7 @@ public class GameController : MonoBehaviour
 			}
 		}
 
+        // Trigger the power up
         if (score >= 1000)
         {
             PowerupMultipleBolts();
@@ -321,22 +342,35 @@ public class GameController : MonoBehaviour
         }
     }
 
+    // Stuff to do once at the start, like display instructions and so on
+    private void StartingText()
+    {
+
+    }
+
 	IEnumerator SpawnWaves()
-	{          
-        instructionsText.text = "left ctrl to fire \narrow keys to move\n'p' to pause";
-        yield return new WaitForSeconds(instructionTime);
-        instructionsText.text = "";
-        waveText.text = "Get ready!";
-        yield return new WaitForSeconds(3);
-
-        int waitTime = (int)(startWait - (instructionTime + 3));
-
-        for (int i = waitTime; i != 0; --i)
+	{
+        // If the user just started a game, display instructions
+        if (newGame)
         {
-            waveText.text = i.ToString();
-            yield return new WaitForSeconds(1);
+            instructionsText.text = "left ctrl to fire \narrow keys to move\n'p' to pause";
+            yield return new WaitForSeconds(instructionTime);
+            instructionsText.text = "";
+            waveText.text = "Get ready!";
+            yield return new WaitForSeconds(3);
+
+            int waitTime = (int)(startWait - (instructionTime + 3));
+
+            for (int i = waitTime; i != 0; --i)
+            {
+                waveText.text = i.ToString();
+                yield return new WaitForSeconds(1);
+            }
         }
 
+        newGame = false;
+
+        // Spawn waves while gameOver is false
 		while(!gameOver)
 		{
 			waveText.text = "Wave " + waveCount.ToString();
@@ -404,14 +438,6 @@ public class GameController : MonoBehaviour
             waveWait += 0.2f; // Increase time between waves each wave
             hazardCount = hazardCount + 3; // add more hazards each wave
 			yield return new WaitForSeconds (waveWait);
-
-            /*
-			if(gameOver)
-			{
-				restartText.text = "Press 'R' to Restart";
-				restart = true;
-				break; 
-			}*/
 		}
 	}
 }
