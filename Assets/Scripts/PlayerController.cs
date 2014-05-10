@@ -30,15 +30,15 @@ public class PlayerController : MonoBehaviour
     public GameObject powerupMusic;
     public GameObject powerupSoundEffect;
     public GameObject powerupWeapon;
-    public float volMax; // The time for the music to come up to full volume
+    public GUIText poweredUpText;
     private bool firstTime;
     //public GameController gameController;
     public GameObject backgroundMusic;
+    private Transform t;
 	
     void Start()
     {
         powerUpOn = false;
-        volMax = 0.5f;
         firstTime = true;
     }
 	public void Update()
@@ -84,10 +84,55 @@ public class PlayerController : MonoBehaviour
         powerupMusic.audio.Play();
         backgroundMusic.audio.Stop();
         powerupSoundEffect.audio.Play();
-
+        StartCoroutine(PoweredUpText());
         // Trigger the event only one
         firstTime = false;
         fireRate -= 0.05f; // Fire faster
+    }
+
+    IEnumerator PoweredUpText()
+    {
+        poweredUpText.text = "Powered Up!";
+
+        // loop over colours
+        // change distance
+        //yield return new WaitForSeconds(3.0f);
+        //Transform t = new Transform();
+        t = poweredUpText.transform; // Store text position
+
+        float delta= 0.01f;
+        int sign = 1;
+        int rand = 1;
+        /*
+        for (float i = 0.0f; i < 3.0f; i += 0.1f)
+        {
+            // Creates random number, effectively either +1 or -1
+            rand = Random.Range(-1, 1);
+            //if (rand == 0)
+              //  rand = -1;
+            /*
+            if (sign == 1)
+                sign = -1;
+
+            else
+                sign = 1;
+            
+            // Play with colours
+           
+            //poweredUpText.color = new Color(104.0f - 20.0f * i, 255.0f - 20.0f * i, 20.0f * i, 255.0f);
+            //poweredUpText.text = i.ToString();
+            //poweredUpText.color = new Color(104, 255, 0, 255);
+            // poweredUpText.text = j.ToString();
+            // Create a bounded box and let it go crazy there
+            // Move position up or down a bit randomly
+            //poweredUpText.transform.position = new Vector3(t.position.x + delta*sign, t.position.y + delta*sign, 0);
+
+            yield return new WaitForSeconds(0.1f);
+        }
+        */
+
+        yield return new WaitForSeconds(3.0f);       
+        poweredUpText.enabled = false;
     }
 
     private IEnumerator PowerupModeEnum()

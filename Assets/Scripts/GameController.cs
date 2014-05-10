@@ -55,7 +55,6 @@ public class GameController : MonoBehaviour
     public GUIText newHighScoreText;
     public GUIText instructionsText;
     public GUIText pausedText;
-    public GUIText poweredUpText;
     public GameObject pausedObject;
 
     // Change resolution
@@ -134,7 +133,6 @@ public class GameController : MonoBehaviour
         newHighScoreText.text = "";
         test.text = "";
         pausedText.text = "";
-        poweredUpText.text = "";
 
         // Pausing
         paused = false;
@@ -171,7 +169,11 @@ public class GameController : MonoBehaviour
 	public void GameOver()
 	{
         waveText.text = "";
-
+   
+        // Restart
+        restartText.text = "Press 'R' to Restart";
+        restart = true;            
+        
         ResetSpeeds(); // Reset speeds of ships and asteroids
         // Maybe destroy all objects?
         // ****
@@ -270,7 +272,7 @@ public class GameController : MonoBehaviour
 			}
 		}
 
-        if (score >= 10)
+        if (score >= 1000)
         {
             PowerupMultipleBolts();
         }
@@ -336,7 +338,7 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
 
-		while(true)
+		while(!gameOver)
 		{
 			waveText.text = "Wave " + waveCount.ToString();
 			yield return new WaitForSeconds (4);
@@ -404,12 +406,13 @@ public class GameController : MonoBehaviour
             hazardCount = hazardCount + 3; // add more hazards each wave
 			yield return new WaitForSeconds (waveWait);
 
+            /*
 			if(gameOver)
 			{
 				restartText.text = "Press 'R' to Restart";
 				restart = true;
 				break; 
-			}
+			}*/
 		}
 	}
 }

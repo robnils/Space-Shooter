@@ -30,6 +30,10 @@ public class MoverEnemyShip : MonoBehaviour
 		movement = rigidbody.velocity; // save starting velocity
         rigidbody.rotation = Quaternion.Euler(180, 0, 0);
 
+        // Speed keeps reassigning itself in inspector to 0
+        fireRate = 0.8f;
+        speed = 3.0f;
+
         // Sounds
         nextFire = 1; // Wait one second before firing
         /*
