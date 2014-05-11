@@ -21,7 +21,10 @@ public class PlayerController : MonoBehaviour
     public float fireRate;
     private float nextFire;
 
-    public int lives; 
+    public int lives;
+    public int maxLives;
+    private Vector3 lifePosition;
+    private int newLivesCount; // Keeps track of the lives the player has gained
 
     // Powerup Mode
     public bool powerUpOn;
@@ -41,7 +44,6 @@ public class PlayerController : MonoBehaviour
 
     public GUIText poweredUpText;
     private bool firstTime;
-    //public GameController gameController;
     public GameObject backgroundMusic;
     private Transform t;
 	
@@ -50,6 +52,8 @@ public class PlayerController : MonoBehaviour
         powerUpOn = false;
         firstTime = true;
         lives = 3;
+        newLivesCount = 0;
+        //maxLives = 5;
 
         // Game controller object set up
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -104,7 +108,7 @@ public class PlayerController : MonoBehaviour
         livesObjectArray = new GameObject[lives];
         for (int i = 0; i < lives; i++)
         {
-            Vector3 lifePosition = new Vector3(12.2f - i*1.3f, 0.0f, -4.0f);            
+            lifePosition = new Vector3(12.2f - i*1.3f, 0.0f, -4.0f);            
             livesObjectArray[i] = (GameObject)Instantiate(livesObject, lifePosition, Quaternion.identity);            
         }
     }
@@ -112,17 +116,58 @@ public class PlayerController : MonoBehaviour
     // What to do when a player loses his life
     public void LoseLife()
     {
-        --lives;        
-        //int remainingLives = livesObjectArray.Length;
-        //Destroy(livesObjectArray[remainingLives - 1]);
-        Destroy(livesObjectArray[lives]);
-        Debug.Log(livesObjectArray.Length.ToString());
-
-        //Instantiate(player, player.transform.position, player.transform.rotation);        
+        --lives;       
+        Destroy(livesObjectArray[lives]);  
         transform.position = new Vector3(0.0f, 0.0f, 0.0f); // Reset position
 
         // Restart the wave
         // StartCoroutine(gameController.SpawnWaves());     // doesnt really work
+    }
+
+    // Add a life
+    public void AddLife()
+    {
+        // If user hasn't reached max lives and addLife is true
+        // Should play a sound effect as well
+        if (lives != maxLives)
+        {
+            // Clear lives array
+            for (int i = 0; i < livesObjectArray.Length; ++i)
+            {
+                Destroy(livesObjectArray[i]);
+            }
+
+            ++lives;
+            livesObjectArray = new GameObject[lives];
+
+            // Displays lives in rows of 3
+            int row = 0;
+            int column = 0;
+            for (int i = 0; i < lives; i++)
+            {
+                
+                // Ugly, need to fix (but works)
+                if (i >= 3)
+                {
+                    // First instance, reset column alignment
+                    if(i == 3)
+                        column = 0;
+                    //++row;
+                    // idea is to substitue 1 and 0 with row and loop over that, but the lives
+                    // end up too high up                     
+
+                    lifePosition = new Vector3(12.2f - column * 1.3f, 0.0f, -4.0f + 1 * 1.55f);
+                    livesObjectArray[i] = (GameObject)Instantiate(livesObject, lifePosition, Quaternion.identity);
+                }
+
+                else
+                {
+                    lifePosition = new Vector3(12.2f - column * 1.3f, 0.0f, -4.0f + 0 * 1.55f);
+                    livesObjectArray[i] = (GameObject)Instantiate(livesObject, lifePosition, Quaternion.identity);
+                }
+                ++column;
+            }
+        }
     }
 
     // Sets up power up mode

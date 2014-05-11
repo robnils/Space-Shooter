@@ -3,23 +3,29 @@ using System.Collections;
 
 
 /* PROBLEMS:
- * Enemy ship explosion
- * Add a life system
+ * DONE
+ *  * add current wave - done!
+ * Add a life system - done!
  * Add more asteroids - done! 
- * Consider mesh renderer for asteroids
  * add a pause button - done! 
  * make asteroids harder, faster - make ships move slower - done!
+ * diagonal asteroids - done
  * 
+ * TO DO
  * add shield
- * add current wave
+ * Enemy ship explosion sound effect fix
+ * Consider mesh renderer for asteroids
  * make powerup a temporary bonus - nerf it
  * weapon ideas: full laser beam
- * diagonal asteroids
  * asteroids from the sides/bottom 
+ * Fix wave issue - new wave should only spawn when old one is dead
+ * Consider mixed waves for later levels
+ * 
+ * 
  * button to disable music/sound effects
- * 
- * 
  * points add lives
+ * 
+
  * 10 waves - mother ship, shots missiles, spawns tons of small ships
  */
 
@@ -62,6 +68,7 @@ public class GameController : MonoBehaviour
     
     // Display
     public GUIText scoreText;
+    public GUIText fullScreenText;
 	public GUIText gameOverText;
 	public GUIText restartText;
 	public GUIText waveText;
@@ -166,19 +173,23 @@ public class GameController : MonoBehaviour
         numberOfEnemyShips = 3;
         gameOver = false;
         restart = false;
+        newGame = true;
+        mover.diagonal = false;  // For diagonal asteroids, set to true
+
+        // Text intialisations
         restartText.text = "";
         gameOverText.text = "";
         waveText.text = "";
         newHighScoreText.text = "";
         test.text = "";
         pausedText.text = "";
-        newHighestWaveText.text = "";
-        //currentWaveText.text = "";
-        newGame = true;
+        newHighestWaveText.text = "";        
+        
+        FullScreenText();
         UpdateCurrentWaveText();
 
-        // For diagonal asteroids, set to true
-        mover.diagonal = false;
+        // Lives
+        playerController.addLife = true;
 
         // Tests
         test.enabled = false;
@@ -186,6 +197,15 @@ public class GameController : MonoBehaviour
         // Pausing
         paused = false;
         timeScale = Time.timeScale; // Store current time scale
+    }
+
+    // Enter fullscreen text
+    private void FullScreenText()
+    {
+        if (!Screen.fullScreen)
+            fullScreenText.text = "Press to Enter to enter fullscreen";
+        else
+            fullScreenText.text = "";
     }
 
     // Save highest score
@@ -325,6 +345,11 @@ public class GameController : MonoBehaviour
 	{
 		score += newScoreValue;
 		UpdateScore ();
+
+        // Add life every 10 000 points
+        if (score % 10000 == 0)
+            playerController.AddLife();
+     
 	}
 
     // For updating the game
@@ -336,9 +361,11 @@ public class GameController : MonoBehaviour
             ResetHighScore();
         }
 
+        // Fullscreeen text
+       FullScreenText();        
+
         // Go full screen or out of it
-        
-        if(Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             if (Screen.fullScreen)
                 Screen.fullScreen = false;
@@ -366,7 +393,7 @@ public class GameController : MonoBehaviour
         if (score >= 1000)
         {
             PowerupMultipleBolts();
-        }
+        }                
 	}
 
     // Sets things up for powerup mode
