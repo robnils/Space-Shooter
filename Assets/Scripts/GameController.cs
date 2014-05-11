@@ -197,6 +197,9 @@ public class GameController : MonoBehaviour
         // Pausing
         paused = false;
         timeScale = Time.timeScale; // Store current time scale
+        
+        
+
     }
 
     // Enter fullscreen text
