@@ -231,6 +231,8 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PoweredDownText()
     {
+        poweredDownText.transform.position = poweredUpText.transform.position;
+
         poweredDownText.enabled = true;       
         poweredDownText.text = "Powered Down...";
         yield return new WaitForSeconds(3.0f);

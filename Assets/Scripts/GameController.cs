@@ -21,8 +21,8 @@ using System.Collections;
  * asteroids from the sides/bottom 
  * Fix wave issue - new wave should only spawn when old one is dead
  * Consider mixed waves for later levels (asteroids and ships)
- * 
- * 
+ * Evasive maneuver for ships
+ * Different asteroids
  * every 10 waves, tell the player theyre doing great (acknowledge/reward somehow)
  * button to disable music/sound effects
  * 
@@ -409,7 +409,6 @@ public class GameController : MonoBehaviour
         if (score % 5000 == 0 && score != 0)
         {
             playerController.powerUpOn = true;
-            //playerController.powerupWaveCount++;
         }     
  
         if(waveCount % 10 == 0)
@@ -481,8 +480,12 @@ public class GameController : MonoBehaviour
         
         // Spawn waves while gameOver is false
 		while(!gameOver)
-		{
+		{          
+            if (playerController.powerUpOn)
+                playerController.powerupWaveCount++;  // keeps track of how long powerupmode is active
+
 			waveText.text = "Wave " + waveCount.ToString();
+            UpdateCurrentWaveText();
 			yield return new WaitForSeconds (4);
 			waveText.text = "";
             resetHighScoresText.text = ""; // Hide so "restarttext" can be displayed when needed
@@ -566,10 +569,7 @@ public class GameController : MonoBehaviour
 			}
             
 			waveCount++;
-            hazardCount = hazardCount + 5; // add more hazards each wave
-
-            if(playerController.powerUpOn)
-                playerController.powerupWaveCount++;  // keeps track of how long powerupmode is active
+            hazardCount = hazardCount + 5; // add more hazards each wave            
 
             /*
             bool enemiesDeadTest = true;
@@ -586,7 +586,7 @@ public class GameController : MonoBehaviour
             */
             waveWait += 0.1f; // Increase time between waves each wave            
 			yield return new WaitForSeconds (waveWait);
-            UpdateCurrentWaveText();
+            
 
 		}
 	}
