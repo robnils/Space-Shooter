@@ -4,12 +4,13 @@ using System.Collections;
 
 /* PROBLEMS:
  * DONE
- *  * add current wave - done!
+ * Add current wave - done!
  * Add a life system - done!
  * Add more asteroids - done! 
  * add a pause button - done! 
  * make asteroids harder, faster - make ships move slower - done!
- * diagonal asteroids - done
+ * diagonal asteroids - done!
+ * points add lives!
  * 
  * TO DO
  * add shield
@@ -19,11 +20,11 @@ using System.Collections;
  * weapon ideas: full laser beam
  * asteroids from the sides/bottom 
  * Fix wave issue - new wave should only spawn when old one is dead
- * Consider mixed waves for later levels
+ * Consider mixed waves for later levels (asteroids and ships)
  * 
  * 
+ * every 10 waves, tell the player theyre doing great (acknowledge/reward somehow)
  * button to disable music/sound effects
- * points add lives
  * 
 
  * 10 waves - mother ship, shots missiles, spawns tons of small ships
@@ -79,6 +80,7 @@ public class GameController : MonoBehaviour
     public GUIText instructionsText;
     public GUIText pausedText;
     public GUIText currentWaveText;
+    public GUIText poweredUpText;
     public GUIText newHighestWaveText;
     public GameObject pausedObject;
     public GameObject livesObject; // Lives icon in the corner
@@ -183,13 +185,11 @@ public class GameController : MonoBehaviour
         newHighScoreText.text = "";
         test.text = "";
         pausedText.text = "";
-        newHighestWaveText.text = "";        
+        newHighestWaveText.text = "";
+        poweredUpText.enabled = false;
         
         FullScreenText();
         UpdateCurrentWaveText();
-
-        // Lives
-        playerController.addLife = true;
 
         // Tests
         test.enabled = false;

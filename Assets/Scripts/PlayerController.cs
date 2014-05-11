@@ -174,11 +174,12 @@ public class PlayerController : MonoBehaviour
     private void PowerupMode()
     {
         // Play/Stop music
+        gameController.poweredUpText.enabled = true;
         powerupMusic.audio.Play();
         backgroundMusic.audio.Stop();
         powerupSoundEffect.audio.Play();
         StartCoroutine(PoweredUpText());
-
+        
         // Trigger the event only one
         firstTime = false;
         fireRate -= 0.05f; // Fire faster

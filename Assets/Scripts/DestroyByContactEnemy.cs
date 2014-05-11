@@ -101,8 +101,8 @@ public class DestroyByContactEnemy : MonoBehaviour
 
             // Add score
             gameController.AddScore (scoreValueEnemy);
-            explosionSoundEffect.audio.Play();
-            Debug.Log("Is it working?");
+            //explosionSoundEffect.audio.Play();
+            //Debug.Log("Is it working?");
 
             // Destroy the bolt and the ship
             Destroy(other.gameObject); 
