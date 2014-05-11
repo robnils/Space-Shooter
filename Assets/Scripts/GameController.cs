@@ -393,34 +393,24 @@ public class GameController : MonoBehaviour
 				Application.LoadLevel(Application.loadedLevel); // currently loaded level
 			}
 		}
-
-        if(playerController.powerUpOn)
-        {
-            
-        }
-
+        
         if (playerController.powerupWaveCount == 2)
             playerController.powerUpOn = false;
 
-        // Trigger the power up
-        /*
-        if (score >= 1000 || waveCount >= 10)
-        {
-            playerController.powerUpOn = true;   
-        }*/
-
+        
         // test case
-        if (score % 100 == 0)
+        /*
+        if (score % 100 == 0 && score != 0)
         {
-
-        }
-
+            playerController.powerUpOn = true;
+        }*/
+        
         // Turn on powerup mode every 5000 points
-        if (score % 5000 == 0)
+        if (score % 5000 == 0 && score != 0)
         {
             playerController.powerUpOn = true;
             //playerController.powerupWaveCount++;
-        }         
+        }     
  
         if(waveCount % 10 == 0)
         {
@@ -578,7 +568,8 @@ public class GameController : MonoBehaviour
 			waveCount++;
             hazardCount = hazardCount + 5; // add more hazards each wave
 
-            playerController.powerupWaveCount++;  // keeps track of how long powerupmode is active
+            if(playerController.powerUpOn)
+                playerController.powerupWaveCount++;  // keeps track of how long powerupmode is active
 
             /*
             bool enemiesDeadTest = true;

@@ -138,7 +138,7 @@ MonoBehaviour:
   newHighScoreText: {fileID: 1935633863}
   instructionsText: {fileID: 1565992928}
   pausedText: {fileID: 355246358}
-  currentWaveText: {fileID: 1122058219}
+  currentWaveText: {fileID: 946023925}
   poweredUpText: {fileID: 1334197070}
   poweredDownText: {fileID: 1180872861}
   newHighestWaveText: {fileID: 768370001}
