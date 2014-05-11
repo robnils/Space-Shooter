@@ -10,12 +10,16 @@ using System.Collections;
  * add a pause button - done! 
  * make asteroids harder, faster - make ships move slower - done!
  * 
- * make powerup a temporary bonus
+ * add shield
+ * add current wave
+ * make powerup a temporary bonus - nerf it
  * weapon ideas: full laser beam
  * diagonal asteroids
  * asteroids from the sides/bottom 
+ * button to disable music/sound effects
  * 
  * 
+ * points add lives
  * 10 waves - mother ship, shots missiles, spawns tons of small ships
  */
 
@@ -28,8 +32,8 @@ public class GameController : MonoBehaviour
     public Vector3 spawnValuesEnemy;
 
     public MoverEnemyShip moverEnemyShip;
-    public Mover mover;
     public PlayerController playerController;
+    public Mover mover;
 
     public float instructionTime;
     private bool newGame;
@@ -67,6 +71,7 @@ public class GameController : MonoBehaviour
     public GUIText newHighScoreText;
     public GUIText instructionsText;
     public GUIText pausedText;
+    public GUIText currentWaveText;
     public GUIText newHighestWaveText;
     public GameObject pausedObject;
     public GameObject livesObject; // Lives icon in the corner
@@ -83,6 +88,7 @@ public class GameController : MonoBehaviour
 
     // test
     public GUIText test;
+
 
     void OnApplicationQuit()
     {
@@ -167,7 +173,9 @@ public class GameController : MonoBehaviour
         test.text = "";
         pausedText.text = "";
         newHighestWaveText.text = "";
+        //currentWaveText.text = "";
         newGame = true;
+        UpdateCurrentWaveText();
 
         // For diagonal asteroids, set to true
         mover.diagonal = false;
@@ -328,6 +336,17 @@ public class GameController : MonoBehaviour
             ResetHighScore();
         }
 
+        // Go full screen or out of it
+        
+        if(Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            if (Screen.fullScreen)
+                Screen.fullScreen = false;
+
+            if (!Screen.fullScreen)
+                Screen.fullScreen = true;
+        }
+
         // Pause game
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -400,6 +419,12 @@ public class GameController : MonoBehaviour
 
     }
 
+    // Update Current Wave text()
+    private void UpdateCurrentWaveText()
+    {
+        currentWaveText.text = "Current Wave: " + waveCount;
+    }
+
 	public IEnumerator SpawnWaves()
 	{
         totalNumberOfEnemies = 0;
@@ -407,7 +432,7 @@ public class GameController : MonoBehaviour
         // If the user just started a game, display instructions
         if (newGame)
         {
-            instructionsText.text = "left ctrl to fire \narrow keys to move\n'space' to pause";
+            instructionsText.text = "left ctrl (left mouse button) to fire \narrow keys (mouse) to move\n'space' to pause";
             yield return new WaitForSeconds(instructionTime);
             instructionsText.text = "";
             waveText.text = "Survive as long \nas you can!";
@@ -511,6 +536,7 @@ public class GameController : MonoBehaviour
 			}
             
 			waveCount++;
+            UpdateCurrentWaveText();
             hazardCount = hazardCount + 5; // add more hazards each wave
             /*
             bool enemiesDeadTest = true;

@@ -118,8 +118,8 @@ MonoBehaviour:
   spawnValues: {x: 12.5, y: 0, z: 16}
   spawnValuesEnemy: {x: 12.5, y: 0, z: 8.5}
   moverEnemyShip: {fileID: 11400002, guid: 9a7e6292e78369c40942b297e6fc5dfd, type: 2}
-  mover: {fileID: 11400000, guid: 58ef6fdbb9faeff4fb7e323d7fec8376, type: 2}
   playerController: {fileID: 1430339273}
+  mover: {fileID: 11400000, guid: 58ef6fdbb9faeff4fb7e323d7fec8376, type: 2}
   instructionTime: 4
   totalNumberOfEnemies: 0
   hazardRate: 2.5
@@ -137,6 +137,7 @@ MonoBehaviour:
   newHighScoreText: {fileID: 1935633863}
   instructionsText: {fileID: 1565992928}
   pausedText: {fileID: 355246358}
+  currentWaveText: {fileID: 1122058219}
   newHighestWaveText: {fileID: 768370001}
   pausedObject: {fileID: 507770063}
   livesObject: {fileID: 0}
@@ -459,6 +460,7 @@ Transform:
   - {fileID: 2047566295}
   - {fileID: 1810026763}
   - {fileID: 754205052}
+  - {fileID: 1122058218}
   - {fileID: 768370000}
   - {fileID: 2048356640}
   m_Father: {fileID: 0}
@@ -5301,6 +5303,57 @@ GUIText:
   m_Color:
     serializedVersion: 2
     rgba: 4278213375
+  m_PixelCorrect: 1
+  m_RichText: 1
+--- !u!1 &1122058217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100024, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1122058218}
+  - 132: {fileID: 1122058219}
+  m_Layer: 0
+  m_Name: Current Wave Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1122058218
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400024, guid: 07de24d1e108a314597bd45ad0d1acc9, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1122058217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .5, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 222440701}
+--- !u!132 &1122058219
+GUIText:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 13200020, guid: 07de24d1e108a314597bd45ad0d1acc9,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1122058217}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Text: Current Wave Text
+  m_Anchor: 4
+  m_Alignment: 0
+  m_PixelOffset: {x: 10, y: -20}
+  m_LineSpacing: 1
+  m_TabSize: 4
+  m_Font: {fileID: 12800000, guid: b166fd45e2cc73b4a9e5ce669e9608d6, type: 3}
+  m_Material: {fileID: 0}
+  m_FontSize: 16
+  m_FontStyle: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
   m_PixelCorrect: 1
   m_RichText: 1
 --- !u!1 &1130591545
