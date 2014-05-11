@@ -27,7 +27,11 @@ public class PlayerController : MonoBehaviour
     private int newLivesCount; // Keeps track of the lives the player has gained
 
     // Powerup Mode
+    public int powerupWaveCount; // Counts the number of waves powerup mode has been active
+    private int timeSamplePoweredDown; // For changing sound effect "direction"
+    private float pitchPoweredDown; // // For changing sound effect pitch
     public GUIText poweredUpText;
+    public GUIText poweredDownText;
     public bool powerUpOn;
     private bool powerUpModeActivated; // powerup mode was activated
     public GameObject player;
@@ -37,7 +41,6 @@ public class PlayerController : MonoBehaviour
     public Transform shotSpawnRight;
     public GameObject powerupMusic;
     public GameObject powerupSoundEffect;
-    public GameObject powerdownSoundEffect;
     public GameObject powerupWeapon;
 
     public GameController gameController;
@@ -55,6 +58,11 @@ public class PlayerController : MonoBehaviour
         firstTime = true;
         lives = 3;
         newLivesCount = 0;
+
+        // Save "correct" sound timesample and pitch
+        timeSamplePoweredDown = powerupSoundEffect.audio.timeSamples;
+        pitchPoweredDown = powerupSoundEffect.audio.pitch;
+
         //maxLives = 5;
 
         // Game controller object set up
@@ -85,12 +93,11 @@ public class PlayerController : MonoBehaviour
 		{
             if (!powerUpOn)
             {
+                // If powerup mode is on, and the flag is off,  play effects
                 if (powerUpModeActivated)
                 {
                     PowerupModeOff();
                 }
-
-
 
                 nextFire = Time.time + fireRate;
                 Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
@@ -178,13 +185,16 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-
   
     // Sets up power up mode
     private void PowerupMode()
     {
         powerUpModeActivated = true;
+        powerupWaveCount = 0;
+
+        // Return sound timesample and pitch
+        powerupSoundEffect.audio.timeSamples = timeSamplePoweredDown;
+        powerupSoundEffect.audio.pitch = pitchPoweredDown; 
 
         // Play/Stop music        
         powerupMusic.audio.Play();
@@ -192,7 +202,6 @@ public class PlayerController : MonoBehaviour
         powerupSoundEffect.audio.Play();
 
         // Poweredup text
-        //gameController.poweredUpText.enabled = true;
         StartCoroutine(PoweredUpText());
         
         // Trigger the event only one
@@ -207,53 +216,46 @@ public class PlayerController : MonoBehaviour
         // Play/Stop music        
         powerupMusic.audio.Stop();
         backgroundMusic.audio.Play();
-
-        // Save current sound timesample and pitch
-        int timeSamplePoweredDown = powerupSoundEffect.audio.timeSamples;
-        float pitchPoweredDown = powerupSoundEffect.audio.pitch;
-
+        
         // Powerdown sound effect Code
         powerupSoundEffect.audio.timeSamples = powerupSoundEffect.audio.clip.samples - 1;
         powerupSoundEffect.audio.pitch = -1;
-        powerupSoundEffect.audio.Play();
-
-        // Return sound timesample and pitch
-        powerupSoundEffect.audio.timeSamples = timeSamplePoweredDown;
-        powerupSoundEffect.audio.pitch = pitchPoweredDown; 
-
+        powerupSoundEffect.audio.Play(); 
+     
         // Powered down text
-        //gameController.poweredUpText.enabled = true;
         StartCoroutine(PoweredDownText());
 
         fireRate += 0.05f; // Fire normal rate
-
         firstTime = true; // Allows powerup mode to be turned on again
     }
 
     IEnumerator PoweredDownText()
     {
-        poweredUpText.enabled = true;
-       
-        poweredUpText.text = "Powered Down...";
-
+        poweredDownText.enabled = true;       
+        poweredDownText.text = "Powered Down...";
         yield return new WaitForSeconds(3.0f);
-        poweredUpText.enabled = false;
+        poweredDownText.enabled = false;
     }
 
     IEnumerator PoweredUpText()
     {
         poweredUpText.enabled = true;
         poweredUpText.text = "Powered Up!";
+        yield return new WaitForSeconds(3.0f);
+        poweredUpText.enabled = false;
 
         // loop over colours
         // change distance
         //yield return new WaitForSeconds(3.0f);
         //Transform t = new Transform();
+        
+        /*
         t = poweredUpText.transform; // Store text position
 
         float delta= 0.01f;
         int sign = 1;
         int rand = 1;
+         */ 
         /*
         for (float i = 0.0f; i < 3.0f; i += 0.1f)
         {
@@ -281,9 +283,6 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         */
-
-        yield return new WaitForSeconds(3.0f);       
-        poweredUpText.enabled = false;
     }
 
     private IEnumerator PowerupModeEnum()

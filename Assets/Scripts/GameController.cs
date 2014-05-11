@@ -81,6 +81,7 @@ public class GameController : MonoBehaviour
     public GUIText pausedText;
     public GUIText currentWaveText;
     public GUIText poweredUpText;
+    public GUIText poweredDownText;
     public GUIText newHighestWaveText;
     public GameObject pausedObject;
     public GameObject livesObject; // Lives icon in the corner
@@ -187,6 +188,7 @@ public class GameController : MonoBehaviour
         pausedText.text = "";
         newHighestWaveText.text = "";
         poweredUpText.enabled = false;
+        poweredDownText.enabled = false;
         
         FullScreenText();
         UpdateCurrentWaveText();
@@ -392,31 +394,39 @@ public class GameController : MonoBehaviour
 			}
 		}
 
-        // Trigger the power up
-        if (score >= 1000)
+        if(playerController.powerUpOn)
         {
-            PowerupMultipleBolts();
-        }                
+            
+        }
+
+        if (playerController.powerupWaveCount == 2)
+            playerController.powerUpOn = false;
+
+        // Trigger the power up
+        /*
+        if (score >= 1000 || waveCount >= 10)
+        {
+            playerController.powerUpOn = true;   
+        }*/
+
+        // test case
+        if (score % 100 == 0)
+        {
+
+        }
+
+        // Turn on powerup mode every 5000 points
+        if (score % 5000 == 0)
+        {
+            playerController.powerUpOn = true;
+            //playerController.powerupWaveCount++;
+        }         
+ 
+        if(waveCount % 10 == 0)
+        {
+            playerController.powerUpOn = true;
+        }
 	}
-
-    // Sets things up for powerup mode
-    private void PowerupMultipleBolts()
-    {
-        playerController.powerUpOn = true;
-       
-        /*** Legacy Code ****/
-        //powerupSoundEffect.audio.Play();
-        //backgroundMusic.audio.Stop();
-        //playerController.Update();
-        //backgroundMusic.audio.Stop();
-        //audio.Stop();
-        // Destroy(backgroundMusic.audio);
-        //backgroundMusic.audio.clip = powerupMusic.audio.clip;
-        //backgroundMusic.audio.Play();
-        //powerupSoundEffect.audio.Play();
-        //powerupMusic.audio.Play();
-    }
-
 
     private void PauseGame()
     {      
@@ -566,8 +576,10 @@ public class GameController : MonoBehaviour
 			}
             
 			waveCount++;
-            UpdateCurrentWaveText();
             hazardCount = hazardCount + 5; // add more hazards each wave
+
+            playerController.powerupWaveCount++;  // keeps track of how long powerupmode is active
+
             /*
             bool enemiesDeadTest = true;
             while (test)
@@ -583,6 +595,7 @@ public class GameController : MonoBehaviour
             */
             waveWait += 0.1f; // Increase time between waves each wave            
 			yield return new WaitForSeconds (waveWait);
+            UpdateCurrentWaveText();
 
 		}
 	}
