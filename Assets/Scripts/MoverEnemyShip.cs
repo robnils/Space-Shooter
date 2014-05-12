@@ -36,6 +36,7 @@ public class MoverEnemyShip : MonoBehaviour
         initialEvade = true;
 
         // Initial values
+        
         startWait.x = 0.5f;
         startWait.y = 1;
         maneuverTime.x = 1;
@@ -46,8 +47,10 @@ public class MoverEnemyShip : MonoBehaviour
         maneuverWait.y = 2;
         
         // Speed keeps reassigning itself in inspector to 0
-        fireRate = 1.0f;
-        speed = 3.0f;
+        // Turns out I was using enemyShipbk in gamecontroller
+        //fireRate = 1.0f;
+        //speed = 3.0f;        
+        
 
 		// Transform.forward is the local x-axis
         // Give each ship a slightly different speed

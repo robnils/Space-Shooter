@@ -28,7 +28,9 @@ using System.Collections;
  * scrolling background
  * back to main menu button
  * consider screen.showcursor lockcursor
-
+ * enemy ships should fly up and down and also attack players
+ * every x waves combine asteroids and ships
+    
  * 10 waves - mother ship, shots missiles, spawns tons of small ships
  */
 
@@ -397,7 +399,7 @@ public class GameController : MonoBehaviour
 			}
 		}
         
-        if (playerController.powerupWaveCount == 2)
+        if (playerController.powerupWaveCount == 3)
             playerController.powerUpOn = false;
 
         
@@ -409,7 +411,7 @@ public class GameController : MonoBehaviour
         }*/
         
         // Turn on powerup mode every 5000 points
-        if (score % 5000 == 0 && score != 0)
+        if (score % 3000 == 0 && score != 0)
         {
             playerController.powerUpOn = true;
         }     
@@ -497,80 +499,30 @@ public class GameController : MonoBehaviour
 			{
 				// Spawn enemy ship every second wave
                 // NOTE: Make a "Mother Ship" that's big and evades attacks?
-				if(waveCount % 2 == 0)
+				if(waveCount % 1 == 0)
 				{
-                    for (int j = 0; j < numberOfEnemyShips; j++)
-                    {                       
-                        // Spawn the ship in one of three invisible rows along the top
-                        // and a random horizontal position  along the x axis
-                        //int row = Random.Range(0,4); // The vertical row (z axis) they lie on
-                        float rangeZ = Random.Range(0.0f, 5.2f);
-                        float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x); // random position along x axis
+                    SpawnEnemyShips(i);                      
 
-                        //Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (16.6f));                        
-                        Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z + rangeZ));
-                        Quaternion spawnRotationEnemy = Quaternion.identity;
-                        Instantiate(enemyShip, spawnPositionEnemy, spawnRotationEnemy);
-
-                        // Aside from the first wave, increase difficult (ship speed & fire rate) each wave
-                        // Note: we're in a loop so we only want the speed to increase once per wave
-                        if (waveCount != 2 && i == 0)
-                        {
-                            if (moverEnemyShip.speed <= 15)
-                                moverEnemyShip.speed += 0.12f;
-
-                            if (moverEnemyShip.fireRate >= 0.4)
-                                moverEnemyShip.fireRate -= 0.01f;
-                        }
-
-                        totalNumberOfEnemies++;  
-                    }
-
-                    // Make a good bit harder every 5 waves
-                    if (waveCount % 5 == 0)
-                        numberOfEnemyShips += 3; 
-
-                    numberOfEnemyShips++;
                     test.text = totalNumberOfEnemies.ToString();
-                    //yield return new WaitForSeconds(spawnWait);
-                    break;					
+                    break;		
 				}
+
+                else if (waveCount % 5 == 0)
+                {
+                    SpawnEnemyShips(i);
+                    SpawnAsteroids(i);
+                }
+
 
                 // Otherwise spawn asteroids
-				else
-				{
-                    // Aside from first wave, increase asteroid difficulty
-                    // note the minus sign: speed is negative to incorporate direction opposite to bolts
-                    // Note: we're in a loop so we only want the speed to increase once per wave
-                    if (waveCount != 1 && i==0)
-                    {
-                        if (mover.speed <= -30)
-                            mover.speed -= 0.5f;
-                        
-                        if(spawnWait > 0.3f)
-                            spawnWait -= 0.02f;
-                    }
-
-                    // For waves larger than 10 make some asteroids diagonally
-                    if (waveCount >= 10)
-                    {
-                        if (Random.Range(0, 2) == 0)                        
-                            mover.diagonal = true;
-
-                        else
-                            mover.diagonal = false;
-                    }
-
-                    float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x);
-
-					Vector3 spawnPosition = new Vector3 (range, spawnValues.y, spawnValues.z);
-					Quaternion spawnRotation = Quaternion.identity;
-					Instantiate (hazard, spawnPosition, spawnRotation);
-                    totalNumberOfEnemies++;
+                else
+                {
+                    SpawnAsteroids(i);
+                    
                     test.text = totalNumberOfEnemies.ToString();
 
-					yield return new WaitForSeconds (spawnWait);
-				}
+                    yield return new WaitForSeconds(spawnWait);
+                }
 			}
             
 			waveCount++;
@@ -595,4 +547,71 @@ public class GameController : MonoBehaviour
 
 		}
 	}
+
+    private void SpawnEnemyShips(int i)
+    {
+        // Aside from the first wave, increase difficult (ship speed & fire rate) each wave
+        // Note: we're in a loop so we only want the speed to increase once per wave
+        if (waveCount != 1 && i == 0)
+        {
+            numberOfEnemyShips += 2;    
+
+            if (moverEnemyShip.speed <= 15)
+                moverEnemyShip.speed += 0.2f;
+
+            if (moverEnemyShip.fireRate >= 0.4)
+                moverEnemyShip.fireRate -= 0.02f;
+        }
+
+        for (int j = 0; j < numberOfEnemyShips; j++)
+        {
+            // Spawn the ship in one of three invisible rows along the top
+            // and a random horizontal position  along the x axis
+            //int row = Random.Range(0,4); // The vertical row (z axis) they lie on
+            float rangeZ = Random.Range(0.0f, 5.2f);
+            float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x); // random position along x axis
+
+            //Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (16.6f));                        
+            Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z + rangeZ));
+            Quaternion spawnRotationEnemy = Quaternion.identity;
+            Instantiate(enemyShip, spawnPositionEnemy, spawnRotationEnemy);
+
+            
+            totalNumberOfEnemies++;
+        }           
+    }
+
+    private void SpawnAsteroids(int i)
+    {
+        // Aside from first wave, increase asteroid difficulty
+        // note the minus sign: speed is negative to incorporate direction opposite to bolts
+        // Note: we're in a loop so we only want the speed to increase once per wave
+        if (waveCount != 1 && i == 0)
+        {
+            if (mover.speed <= -30)
+                mover.speed -= 0.5f;
+
+            if (spawnWait > 0.3f)
+                spawnWait -= 0.02f;
+        }
+
+        // For waves larger than 10 make some asteroids diagonally
+        if (waveCount >= 10)
+        {
+            if (Random.Range(0, 2) == 0)
+                mover.diagonal = true;
+
+            else
+                mover.diagonal = false;
+        }
+
+        float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x);
+
+        Vector3 spawnPosition = new Vector3(range, spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        Instantiate(hazard, spawnPosition, spawnRotation);
+
+        totalNumberOfEnemies++;
+    }
 }
+
