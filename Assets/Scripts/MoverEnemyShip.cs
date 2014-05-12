@@ -14,6 +14,16 @@ public class MoverEnemyShip : MonoBehaviour
     private float nextFire; // when the next shot will occur
 
     // Evasive maneuver
+    public bool evadeOn;
+    private bool initialEvade;
+    public float dodge;
+    public float smoothing;
+    public Vector2 startWait;
+    public Vector2 maneuverTime;
+    public Vector2 maneuverWait;
+
+    private float currentSpeed;
+    private float targetManeuver;
 
     // For testing
 	public bool test = false;
@@ -21,8 +31,22 @@ public class MoverEnemyShip : MonoBehaviour
 
 	void Start()
 	{
+        // Evade off initialiity
+        evadeOn = true;
+        initialEvade = true;
+
+        // Initial values
+        startWait.x = 0.5f;
+        startWait.y = 1;
+        maneuverTime.x = 1;
+        maneuverTime.y = 2;
+        dodge = 5;
+        smoothing = 7.5f;
+        maneuverWait.x = 1;
+        maneuverWait.y = 2;
+        
         // Speed keeps reassigning itself in inspector to 0
-        fireRate = 0.8f;
+        fireRate = 1.0f;
         speed = 3.0f;
 
 		// Transform.forward is the local x-axis
@@ -45,44 +69,85 @@ public class MoverEnemyShip : MonoBehaviour
             audio.Play();
         }
 
-		// Make the ship bounce off the left and right
-		if(rigidbody.position.x >= boundary.xMax)
-		{
-            movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f); 
-			rigidbody.velocity = movement;
-		}
-
-		if(rigidbody.position.x <= boundary.xMin)
-		{
-
-            movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f);
-			rigidbody.velocity = movement;
-		}
-
-        // Make the ship bounce off top and bottom
-        if (rigidbody.position.z >= boundary.zMax)
+        // If moving downward to evade
+        if (evadeOn)
         {
-            movement.z = -1 * movement.z * Random.Range(0.5f, 1.0f);
-            rigidbody.velocity = movement;
+            if (initialEvade)
+            {
+                currentSpeed = rigidbody.velocity.z;
+                StartCoroutine(Evade());
+
+                initialEvade = false;
+            }
+
+            float newManeuver = Mathf.MoveTowards(rigidbody.velocity.x, targetManeuver, smoothing * Time.deltaTime);
+            rigidbody.velocity = new Vector3(newManeuver, 0.0f, currentSpeed);
+
+            // Make ship bounded by boundaries
+            rigidbody.position = new Vector3
+                (
+                    Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax),
+                    0.0f,
+                    Mathf.Clamp(rigidbody.position.z, boundary.zMin, boundary.zMax)
+                    );
         }
 
-        if (rigidbody.position.z <= boundary.zMin)
+        else
         {
 
-            movement.z = -1 * movement.x * Random.Range(0.5f, 1.0f);
-            rigidbody.velocity = movement;
+            // Make the ship bounce off the left and right
+            if (rigidbody.position.x >= boundary.xMax)
+            {
+                movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f);
+                rigidbody.velocity = movement;
+            }
+
+            if (rigidbody.position.x <= boundary.xMin)
+            {
+
+                movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f);
+                rigidbody.velocity = movement;
+            }
+
+            // Make the ship bounce off top and bottom
+            if (rigidbody.position.z >= boundary.zMax)
+            {
+                movement.z = -1 * movement.z * Random.Range(0.5f, 1.0f);
+                rigidbody.velocity = movement;
+            }
+
+            if (rigidbody.position.z <= boundary.zMin)
+            {
+                movement.z = -1 * movement.x * Random.Range(0.5f, 1.0f);
+                rigidbody.velocity = movement;
+            }
+
+            // Make ship bounded by different boundaries
+            rigidbody.position = new Vector3
+                (
+                    Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax),
+                    0.0f,
+                    Mathf.Clamp(rigidbody.position.z, -6.5f, boundary.zMax)
+                    );
         }
-
-        // Make ship bounded by boundaries
-		rigidbody.position = new Vector3 
-			(
-				Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax),
-				0.0f, 
-				Mathf.Clamp(rigidbody.position.z, boundary.zMin, boundary.zMax)
-				);
-
 		// Ship movement tilt
-		rigidbody.rotation = Quaternion.Euler(180,0,rigidbody.velocity.x*(-tilt));
+		rigidbody.rotation = Quaternion.Euler(180,0,rigidbody.velocity.x*(tilt));
         //shotSpawn.rotation = Quaternion.Euler(0, 0, 180);
 	}
+
+    // Evasive maneuvers
+    IEnumerator Evade()
+    {
+        yield return new WaitForSeconds(Random.Range(startWait.x, startWait.y));
+        while (true)
+        {
+            targetManeuver = Random.Range(1, dodge) * -Mathf.Sign(transform.position.x);
+            yield return new WaitForSeconds(Random.Range(maneuverTime.x, maneuverTime.y));
+            targetManeuver = 0;
+            yield return new WaitForSeconds(Random.Range(maneuverWait.x, maneuverWait.y));
+        }
+    }
 }
+
+
+

@@ -6,7 +6,7 @@ public class Background : MonoBehaviour
     public float scrollSpeed; 
     public float tileSizeZ;
 
-    private Vector3 startPosition;
+    private Vector3 startPosition;    
 
     void Start()
     {
@@ -15,11 +15,12 @@ public class Background : MonoBehaviour
         //transform.localScale = new Vector3(Screen.width, Screen.height);
      
         startPosition = transform.position;
+
     }
 
     void Update()
     {
-        float newPosition = Mathf.Repeat(Time.time * scrollSpeed, tileSizeZ);
-        transform.position = startPosition + Vector3.forward * newPosition;
+        //float newPosition = Mathf.Repeat(Time.time * scrollSpeed, tileSizeZ);
+        //transform.position = startPosition + Vector3.forward * newPosition;
     }
 }
