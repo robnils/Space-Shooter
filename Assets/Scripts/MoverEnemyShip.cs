@@ -27,7 +27,7 @@ public class MoverEnemyShip : MonoBehaviour
 
     // For testing
 	public bool test = false;
-
+    public float f;
 
 	void Start()
 	{
@@ -56,8 +56,13 @@ public class MoverEnemyShip : MonoBehaviour
         // Give each ship a slightly different speed
         rigidbody.velocity = transform.right * (speed + Random.Range(-1.0f, 1.0f));
 		movement = rigidbody.velocity; // save starting velocity
+
+        // Needed to flip the ship
         rigidbody.rotation = Quaternion.Euler(180, 0, 0);
 
+        // Gives downward velocity
+        rigidbody.velocity = transform.forward * (-1)*(speed + Random.Range(-1.0f, 1.0f));
+        boundary.zMin = 8.5f;
         nextFire = 1; // Wait one second before firing
         
 	}
@@ -75,24 +80,45 @@ public class MoverEnemyShip : MonoBehaviour
         // If moving downward to evade
         if (evadeOn)
         {
+            //boundary.zMin = 8.5f;
             if (initialEvade)
             {
-                currentSpeed = rigidbody.velocity.z;
+                currentSpeed = rigidbody.velocity.z;                
                 StartCoroutine(Evade());
 
                 initialEvade = false;
             }
 
             float newManeuver = Mathf.MoveTowards(rigidbody.velocity.x, targetManeuver, smoothing * Time.deltaTime);
-            rigidbody.velocity = new Vector3(newManeuver, 0.0f, currentSpeed);
+            rigidbody.velocity = new Vector3(newManeuver, 0.0f, currentSpeed);            
 
             // Make ship bounded by boundaries
+            // Use random number generator to clamp into different rows
             rigidbody.position = new Vector3
                 (
                     Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax),
                     0.0f,
-                    Mathf.Clamp(rigidbody.position.z, boundary.zMin, boundary.zMax)
+                    Mathf.Clamp(rigidbody.position.z, -6.5f, 16.7f)
                     );
+
+            f = Random.Range(0.0f, 1.0f);
+            if (f >= 0.5f)
+            {
+                if (rigidbody.position.z == boundary.zMin)
+                {
+                    rigidbody.velocity = transform.right * (speed + Random.Range(-1.0f, 1.0f));
+                }
+            }
+            /*
+            f = Random.Range(0.0f, 1.0f);
+            if (f >= 0.5f)
+            {
+                boundary.zMin = -6.5f;
+            }
+
+            else
+                boundary.zMax = 8.5f;
+             * */
         }
 
         else

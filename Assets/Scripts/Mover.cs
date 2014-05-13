@@ -9,9 +9,6 @@ public class Mover : MonoBehaviour
 
 	void Start()
 	{
-        // Speed keeps being set to zero in inspector so safer here
-        //speed = -3.0f;
-
         // Move diagonally
         if (diagonal)
         {

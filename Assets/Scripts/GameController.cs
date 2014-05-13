@@ -30,6 +30,7 @@ using System.Collections;
  * consider screen.showcursor lockcursor
  * enemy ships should fly up and down and also attack players
  * every x waves combine asteroids and ships
+ * Make ships randomly "stop" in different imaginary rows (1-3), and then randomly attack
     
  * 10 waves - mother ship, shots missiles, spawns tons of small ships
  */
@@ -462,7 +463,7 @@ public class GameController : MonoBehaviour
 	public IEnumerator SpawnWaves()
 	{
         totalNumberOfEnemies = 0;
-
+        newGame = false;
         // If the user just started a game, display instructions
         if (newGame)
         {
@@ -499,7 +500,7 @@ public class GameController : MonoBehaviour
 			{
 				// Spawn enemy ship every second wave
                 // NOTE: Make a "Mother Ship" that's big and evades attacks?
-				if(waveCount % 2 == 0)
+				if(waveCount % 1 == 0)
 				{
                     SpawnEnemyShips(i);                      
 
@@ -574,8 +575,8 @@ public class GameController : MonoBehaviour
                 float rangeZ = Random.Range(0.0f, 5.2f);
                 float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x); // random position along x axis
 
-                //Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (16.6f));                        
-                Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z + rangeZ));
+                Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (16.6f));                        
+                //Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z + rangeZ));
                 Quaternion spawnRotationEnemy = Quaternion.identity;
                 Instantiate(enemyShip, spawnPositionEnemy, spawnRotationEnemy);
 
