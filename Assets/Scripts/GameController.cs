@@ -499,7 +499,7 @@ public class GameController : MonoBehaviour
 			{
 				// Spawn enemy ship every second wave
                 // NOTE: Make a "Mother Ship" that's big and evades attacks?
-				if(waveCount % 1 == 0)
+				if(waveCount % 2 == 0)
 				{
                     SpawnEnemyShips(i);                      
 
@@ -549,36 +549,40 @@ public class GameController : MonoBehaviour
 	}
 
     private void SpawnEnemyShips(int i)
-    {
-        // Aside from the first wave, increase difficult (ship speed & fire rate) each wave
-        // Note: we're in a loop so we only want the speed to increase once per wave
-        if (waveCount != 1 && i == 0)
+    {        
+        if (i == 0)
         {
-            numberOfEnemyShips += 2;    
+            // Aside from the first wave, increase difficult (ship speed & fire rate) each wave
+            // Note: we're in a loop so we only want the speed to increase once per wave
+            if (waveCount != 1)
+            {
+                numberOfEnemyShips++;
 
-            if (moverEnemyShip.speed <= 15)
-                moverEnemyShip.speed += 0.2f;
+                if (moverEnemyShip.speed <= 15)
+                    moverEnemyShip.speed += 0.2f;
 
-            if (moverEnemyShip.fireRate >= 0.4)
-                moverEnemyShip.fireRate -= 0.02f;
+                if (moverEnemyShip.fireRate >= 0.4)
+                    moverEnemyShip.fireRate -= 0.02f;
+            }
+
+
+            for (int j = 0; j < numberOfEnemyShips; j++)
+            {
+                // Spawn the ship in one of three invisible rows along the top
+                // and a random horizontal position  along the x axis
+                //int row = Random.Range(0,4); // The vertical row (z axis) they lie on
+                float rangeZ = Random.Range(0.0f, 5.2f);
+                float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x); // random position along x axis
+
+                //Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (16.6f));                        
+                Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z + rangeZ));
+                Quaternion spawnRotationEnemy = Quaternion.identity;
+                Instantiate(enemyShip, spawnPositionEnemy, spawnRotationEnemy);
+
+
+                totalNumberOfEnemies++;
+            }
         }
-
-        for (int j = 0; j < numberOfEnemyShips; j++)
-        {
-            // Spawn the ship in one of three invisible rows along the top
-            // and a random horizontal position  along the x axis
-            //int row = Random.Range(0,4); // The vertical row (z axis) they lie on
-            float rangeZ = Random.Range(0.0f, 5.2f);
-            float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x); // random position along x axis
-
-            //Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (16.6f));                        
-            Vector3 spawnPositionEnemy = new Vector3(range, spawnValuesEnemy.y, (spawnValuesEnemy.z + rangeZ));
-            Quaternion spawnRotationEnemy = Quaternion.identity;
-            Instantiate(enemyShip, spawnPositionEnemy, spawnRotationEnemy);
-
-            
-            totalNumberOfEnemies++;
-        }           
     }
 
     private void SpawnAsteroids(int i)
