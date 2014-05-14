@@ -10,26 +10,27 @@ using System.Collections;
  * add a pause button - done! 
  * make asteroids harder, faster - make ships move slower - done!
  * diagonal asteroids - done!
- * points add lives!
+ * points add lives! - done! ish
+ * make powerup a temporary bonus - nerf it - done!
+ * Consider mixed waves for later levels (asteroids and ships)- * every x waves combine asteroids and ships - done! 
+ * Different asteroids - done!
+ * Evasive maneuver for ships - done!
+ * back to main menu button - done!
+ * consider screen.showcursor lockcursor - done!
  * 
- * TO DO
+ * 
+ * * TO DO
+ * make powerup drop from boxes
  * add shield
  * Enemy ship explosion sound effect fix
- * Consider mesh renderer for asteroids
- * make powerup a temporary bonus - nerf it
+
  * weapon ideas: full laser beam
  * asteroids from the sides/bottom 
  * Fix wave issue - new wave should only spawn when old one is dead
- * Consider mixed waves for later levels (asteroids and ships)
- * Evasive maneuver for ships
- * Different asteroids
  * every 10 waves, tell the player theyre doing great (acknowledge/reward somehow)
  * button to disable music/sound effects
  * scrolling background
- * back to main menu button
- * consider screen.showcursor lockcursor
  * enemy ships should fly up and down and also attack players
- * every x waves combine asteroids and ships
  * Make ships randomly "stop" in different imaginary rows (1-3), and then randomly attack
  * is powered down sound effect working correctly?    
  * make mothership fire different things at different speeds
@@ -122,18 +123,16 @@ public class GameController : MonoBehaviour
     void OnGUI()
     {
         if (paused)
-        {
-            Screen.showCursor = true;
+        {            
             if (GUI.Button(new Rect((Screen.width / 2) - 75, 250, 150, 80), "Back to main menu"))
             {
                 Application.LoadLevel("menu");
             }
 
             else if (GUI.Button(new Rect((Screen.width / 2) - 75, 350, 150, 80), "Resume game"))
-            {
-                Screen.showCursor = false;
+            {                
                 PauseGame();                
-            }
+            } 
         }
         /*
         scale.x = Screen.width / originalWidth; // calculate hor scale
@@ -471,6 +470,7 @@ public class GameController : MonoBehaviour
         // If not paused, pause
         if (!paused)
         {
+            Screen.showCursor = true; 
             pausedObject.audio.Play();
             //audio.Stop(); // Pause background music
             backgroundMusic.audio.volume = 0.1f;
@@ -482,6 +482,7 @@ public class GameController : MonoBehaviour
         // Otherwise unpause
         else if (paused)
         {
+            Screen.showCursor = false;
             pausedObject.audio.Play();
             //audio.Play(); // Resume background music
             backgroundMusic.audio.volume = 0.5f;
