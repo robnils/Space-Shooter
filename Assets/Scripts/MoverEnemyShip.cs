@@ -22,6 +22,7 @@ public class MoverEnemyShip : MonoBehaviour
     public Vector2 startWait;
     public Vector2 maneuverTime;
     public Vector2 maneuverWait;
+    public GameController gameController;
 
     private float currentSpeed;
     private float targetManeuver;
@@ -32,12 +33,22 @@ public class MoverEnemyShip : MonoBehaviour
 
 	void Start()
 	{
+        // Gamecontroller setup
+        GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+
+        if (gameControllerObject != null)
+        {
+            gameController = gameControllerObject.GetComponent<GameController>();
+        }
+
+        if (gameControllerObject == null)
+            Debug.Log("Cannot find 'GameController' script");
+
         // Evade off initialiity
         evadeOn = true;
         initialEvade = true;
 
-        // Initial values
-        
+        // Initial values        
         startWait.x = 0.5f;
         startWait.y = 1;
         maneuverTime.x = 1;
@@ -58,14 +69,24 @@ public class MoverEnemyShip : MonoBehaviour
 
         // Gives downward velocity
         newSpeed = speed + Random.Range(-1.0f, 1.0f);
-        rigidbody.velocity = transform.forward *(-newSpeed);
+        
+        // Weird game bug - the ships go the wrong direction when spawned from the mother ship!
+        if (gameController.mothershipAlive)
+            rigidbody.velocity = transform.forward * (newSpeed);
+
+        else
+        {
+            newSpeed = speed + 2 + Random.Range(-1.0f, 1.0f);
+            rigidbody.velocity = transform.forward * (-newSpeed);            
+        }
+
         movement = rigidbody.velocity;
         boundary.zMin = 8.5f;
         nextFire = Time.time + 1; // Wait one second before firing
 	}
 
 	void FixedUpdate()
-	{
+	{       
         // Make ship fire bolts every fireRate inverse seconds 
         if (Time.time > nextFire)
         {

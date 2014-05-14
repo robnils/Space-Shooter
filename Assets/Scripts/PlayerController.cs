@@ -63,8 +63,6 @@ public class PlayerController : MonoBehaviour
         timeSamplePoweredDown = powerupSoundEffect.audio.timeSamples;
         pitchPoweredDown = powerupSoundEffect.audio.pitch;
 
-        //maxLives = 5;
-
         // Game controller object set up
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
 

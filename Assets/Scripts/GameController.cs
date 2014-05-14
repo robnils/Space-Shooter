@@ -479,7 +479,7 @@ public class GameController : MonoBehaviour
 	public IEnumerator SpawnWaves()
 	{
         totalNumberOfEnemies = 0;
-        newGame = false;
+        newGame = true;
         // If the user just started a game, display instructions
         if (newGame)
         {
@@ -513,7 +513,7 @@ public class GameController : MonoBehaviour
             resetHighScoresText.text = ""; // Hide so "restarttext" can be displayed when needed
 
             // Mother ship every 10 waves
-            if (waveCount % 1 == 0)
+            if (waveCount % 10 == 0)
             {
                 Vector3 spawnPositionMothership = new Vector3(0.0f, 0.0f, 12.0f);               
                 Quaternion spawnRotationMothership = Quaternion.identity;

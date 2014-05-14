@@ -57,13 +57,12 @@ public class DestroyByContactEnemy : MonoBehaviour
         }
 
 		// If ship collides with player
-        // Currently set up so this doesn't happen
 		if (other.tag == "Player") 
 		{
             // Display explosions and destroy ship and player
-			Instantiate (explosionPlayer, transform.position, transform.rotation);
+            Instantiate(explosionPlayer, transform.position, transform.rotation);
             Instantiate(explosionEnemy, other.transform.position, other.transform.rotation);
-            //Destroy(other.gameObject);
+
             Destroy(gameObject);
 
             // End game if out of lives
@@ -92,7 +91,6 @@ public class DestroyByContactEnemy : MonoBehaviour
 
             // Subtract from total list of enemies
             --gameController.totalNumberOfEnemies;
-
             gameController.test.text = gameController.totalNumberOfEnemies.ToString();
         }
 	}

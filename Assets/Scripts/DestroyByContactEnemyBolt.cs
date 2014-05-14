@@ -55,7 +55,6 @@ public class DestroyByContactEnemyBolt : MonoBehaviour
             Instantiate(explosionPlayer, transform.position, transform.rotation);
 
             // Destroy bolt and player objects
-            //Destroy(other.gameObject);
             Destroy(gameObject);
 
             Debug.Log("bolt hit player,# of lives is: " + playerController.lives);
