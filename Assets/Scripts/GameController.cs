@@ -35,6 +35,7 @@ using System.Collections;
  * make mothership fire different things at different speeds
  * can use mothership "game logic" to controll waves? 
  * 10 waves - mother ship, shots missiles, spawns tons of small ships
+ * fix score & life - modulus doesnt really work
  */
 
 // Used to spawn hazards
@@ -94,6 +95,7 @@ public class GameController : MonoBehaviour
     public GUIText poweredUpText;
     public GUIText poweredDownText;
     public GUIText newHighestWaveText;
+    public GUIText newLifeText;
     public GameObject pausedObject;
     public GameObject livesObject; // Lives icon in the corner
 
@@ -211,6 +213,7 @@ public class GameController : MonoBehaviour
         test.text = "";
         pausedText.text = "";
         newHighestWaveText.text = "";
+        newLifeText.enabled = false;
         poweredUpText.enabled = false;
         poweredDownText.enabled = false;
         
@@ -373,11 +376,21 @@ public class GameController : MonoBehaviour
 		score += newScoreValue;
 		UpdateScore ();
 
-        // Add life every 10 000 points
-        if (score % 10000 == 0)
+        // Add life every 5 000 points
+        if (score % 5000 == 0)
+        {
             playerController.AddLife();
+            StartCoroutine(AddLifeText());
+        }
      
 	}
+
+    public IEnumerator AddLifeText()
+    {
+        newLifeText.enabled = true;
+        yield return new WaitForSeconds(4.0f);
+        newLifeText.enabled = false;
+    }
 
     // For updating the game
 	void Update()
@@ -426,6 +439,8 @@ public class GameController : MonoBehaviour
         {
             playerController.powerUpOn = true;
         }*/
+
+        // Lives to player
         
         // Turn on powerup mode every 5000 points
         if (score % 3000 == 0 && score != 0)
