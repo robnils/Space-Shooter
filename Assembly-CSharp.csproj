@@ -68,6 +68,7 @@
      <Compile Include="Assets\Scripts\Mover.cs" />
      <Compile Include="Assets\Scripts\MoverBolt.cs" />
      <Compile Include="Assets\Scripts\MoverEnemyShip.cs" />
+     <Compile Include="Assets\Scripts\MoverMothership.cs" />
      <Compile Include="Assets\Scripts\MyUnitySingleton.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\RandomRotator.cs" />

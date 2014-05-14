@@ -55,6 +55,7 @@ public class GameController : MonoBehaviour
     private float shipSpeed; // Original peed of enemy ships
     private float shipFireRate; // Original ship fire rate
     private float hazardSpeed; // Original asteroid speed
+    public GameObject[] asteroidsObjects;
 
     public int totalNumberOfEnemies; // keeps track of number of enemies
 
@@ -149,7 +150,7 @@ public class GameController : MonoBehaviour
         DisplayResetHighScores();
 
         // Start game
-		StartCoroutine (SpawnWaves ());;
+		//StartCoroutine (SpawnWaves ());;
 
         // Play background music
         backgroundMusic.audio.Play();
@@ -205,9 +206,6 @@ public class GameController : MonoBehaviour
         // Pausing
         paused = false;
         timeScale = Time.timeScale; // Store current time scale
-        
-        
-
     }
 
     // Enter fullscreen text
@@ -500,7 +498,7 @@ public class GameController : MonoBehaviour
 			{
 				// Spawn enemy ship every second wave
                 // NOTE: Make a "Mother Ship" that's big and evades attacks?
-				if(waveCount % 1 == 0)
+				if(waveCount % 2 == 0)
 				{
                     SpawnEnemyShips(i);                      
 
@@ -509,9 +507,10 @@ public class GameController : MonoBehaviour
 				}
 
                 else if (waveCount % 5 == 0)
-                {
-                    SpawnEnemyShips(i);
+                {                    
                     SpawnAsteroids(i);
+                    yield return new WaitForSeconds(spawnWait/2.0f);
+                    SpawnEnemyShips(i);
                 }
 
 
@@ -611,10 +610,11 @@ public class GameController : MonoBehaviour
         }
 
         float range = Random.Range(-spawnValuesEnemy.x, spawnValuesEnemy.x);
-
+        GameObject asteroid = asteroidsObjects[Random.Range(0, asteroidsObjects.Length)];
         Vector3 spawnPosition = new Vector3(range, spawnValues.y, spawnValues.z);
         Quaternion spawnRotation = Quaternion.identity;
-        Instantiate(hazard, spawnPosition, spawnRotation);
+        Instantiate(asteroid, spawnPosition, spawnRotation);
+        //Instantiate(hazard, spawnPosition, spawnRotation);
 
         totalNumberOfEnemies++;
     }
