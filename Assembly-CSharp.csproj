@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\DestroyByContact.cs" />
      <Compile Include="Assets\Scripts\DestroyByContactEnemy.cs" />
      <Compile Include="Assets\Scripts\DestroyByContactEnemyBolt.cs" />
+     <Compile Include="Assets\Scripts\DestroyByContactMothership.cs" />
      <Compile Include="Assets\Scripts\DestroyByTime.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\HighScores.cs" />

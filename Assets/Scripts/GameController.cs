@@ -40,6 +40,7 @@ public class GameController : MonoBehaviour
 {
 	public GameObject hazard;
 	public GameObject enemyShip;
+    public GameObject motherShip;
 	public Vector3 spawnValues;
     public Vector3 spawnValuesEnemy;
 
@@ -150,7 +151,7 @@ public class GameController : MonoBehaviour
         DisplayResetHighScores();
 
         // Start game
-		//StartCoroutine (SpawnWaves ());;
+		StartCoroutine (SpawnWaves ());;
 
         // Play background music
         backgroundMusic.audio.Play();
@@ -493,40 +494,60 @@ public class GameController : MonoBehaviour
 			yield return new WaitForSeconds (4);
 			waveText.text = "";
             resetHighScoresText.text = ""; // Hide so "restarttext" can be displayed when needed
-            
-			for (int i = 0; i < hazardCount; i++) 
-			{
-				// Spawn enemy ship every second wave
-                // NOTE: Make a "Mother Ship" that's big and evades attacks?
-				if(waveCount % 2 == 0)
-				{
-                    SpawnEnemyShips(i);                      
 
-                    test.text = totalNumberOfEnemies.ToString();
-                    break;		
-				}
+            // Mother ship every 10 waves
+            if (waveCount % 1 == 0)
+            {
+                Vector3 spawnPositionMothership = new Vector3(0.0f, 0.0f, 7.2f);               
+                Quaternion spawnRotationMothership = Quaternion.identity;
+                Instantiate(motherShip, spawnPositionMothership, spawnRotationMothership);
 
-                else if (waveCount % 5 == 0)
-                {                    
-                    SpawnAsteroids(i);
-                    yield return new WaitForSeconds(spawnWait/2.0f);
-                    SpawnEnemyShips(i);
-                }
-
-
-                // Otherwise spawn asteroids
-                else
+                // While fighting boss, wait
+                while (true)
                 {
-                    SpawnAsteroids(i);
-                    
-                    test.text = totalNumberOfEnemies.ToString();
+                    yield return new WaitForSeconds(1.0f);
 
-                    yield return new WaitForSeconds(spawnWait);
+                    // if boss destroyed, break loop
+                        break;
                 }
-			}
+            }
+
+            else
+            {
+                for (int i = 0; i < hazardCount; i++)
+                {
+                    // Spawn enemy ship every second wave
+                    // NOTE: Make a "Mother Ship" that's big and evades attacks?
+                    if (waveCount % 2 == 0)
+                    {
+                        SpawnEnemyShips(i);
+
+                        test.text = totalNumberOfEnemies.ToString();
+                        break;
+                    }
+
+                    else if (waveCount % 5 == 0)
+                    {
+                        SpawnAsteroids(i);
+                        yield return new WaitForSeconds(spawnWait / 2.0f);
+                        SpawnEnemyShips(i);
+                    }
+
+
+                    // Otherwise spawn asteroids
+                    else
+                    {
+                        SpawnAsteroids(i);
+
+                        test.text = totalNumberOfEnemies.ToString();
+
+                        yield return new WaitForSeconds(spawnWait);
+                    }
+                }
+            }
             
 			waveCount++;
-            hazardCount = hazardCount + 5; // add more hazards each wave            
+            hazardCount = hazardCount + 4; // add more hazards each wave            
 
             /*
             bool enemiesDeadTest = true;

@@ -9,14 +9,7 @@ public class DestroyByContactEnemy : MonoBehaviour
 	private GameController gameController;
     public MoverEnemyShip moverEnemyShip;
     public GameObject explosionSoundEffect;
-    public PlayerController playerController;
-    // Sounds
-    /*
-    public AudioSource[] sounds;
-    public AudioSource weapon;
-    public AudioSource explosion;
-    */
-    
+    public PlayerController playerController;    
 
 	void Start()
 	{
@@ -41,13 +34,6 @@ public class DestroyByContactEnemy : MonoBehaviour
 
         if (playerControllerObject == null)
             Debug.Log("Cannot find 'PlayerController' script");
-
-        // Sounds
-        /*
-        sounds = GetComponents<AudioSource>();
-        weapon = sounds[0];
-        explosion = sounds[1]; // At [0] is weapon sound
-         */
 	}
 
 	void OnTriggerEnter(Collider other) 
@@ -80,8 +66,6 @@ public class DestroyByContactEnemy : MonoBehaviour
             //Destroy(other.gameObject);
             Destroy(gameObject);
 
-            Debug.Log("Ship apparently collided with enemy ship - bug!");
-
             // End game if out of lives
             if (playerController.lives == 0)
             {
@@ -101,8 +85,6 @@ public class DestroyByContactEnemy : MonoBehaviour
 
             // Add score
             gameController.AddScore (scoreValueEnemy);
-            //explosionSoundEffect.audio.Play();
-            //Debug.Log("Is it working?");
 
             // Destroy the bolt and the ship
             Destroy(other.gameObject); 
@@ -113,8 +95,6 @@ public class DestroyByContactEnemy : MonoBehaviour
 
             gameController.test.text = gameController.totalNumberOfEnemies.ToString();
         }
-        // Try else return to fix asteroid colliding asteroid problem?
-        // -- Update, think making the collider a trigger fixed it
 	}
 
 }
