@@ -49,9 +49,9 @@ public class MoverEnemyShip : MonoBehaviour
 
 		// Transform.forward is the local x-axis
         // Give each ship a slightly different speed
-        newSpeed = speed + Random.Range(-1.0f, 1.0f);
-        rigidbody.velocity = transform.right * (newSpeed);
-		movement = rigidbody.velocity; // save starting velocity
+        //newSpeed = speed + Random.Range(-1.0f, 1.0f);
+        //rigidbody.velocity = transform.right * (newSpeed);
+		//movement = rigidbody.velocity; // save starting velocity
 
         // Needed to flip the ship
         rigidbody.rotation = Quaternion.Euler(180, 0, 0);
@@ -59,9 +59,9 @@ public class MoverEnemyShip : MonoBehaviour
         // Gives downward velocity
         newSpeed = speed + Random.Range(-1.0f, 1.0f);
         rigidbody.velocity = transform.forward *(-newSpeed);
+        movement = rigidbody.velocity;
         boundary.zMin = 8.5f;
-        nextFire = 1; // Wait one second before firing
-        
+        nextFire = Time.time + 1; // Wait one second before firing
 	}
 
 	void FixedUpdate()

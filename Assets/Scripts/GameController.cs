@@ -31,7 +31,7 @@ using System.Collections;
  * enemy ships should fly up and down and also attack players
  * every x waves combine asteroids and ships
  * Make ships randomly "stop" in different imaginary rows (1-3), and then randomly attack
-    
+ * is powered down sound effect working correctly?    
  * make mothership fire different things at different speeds
  * can use mothership "game logic" to controll waves? 
  * 10 waves - mother ship, shots missiles, spawns tons of small ships
@@ -118,6 +118,19 @@ public class GameController : MonoBehaviour
 
     void OnGUI()
     {
+        if (paused)
+        {
+            Screen.showCursor = true;
+            if (GUI.Button(new Rect((Screen.width / 2) - 75, 250, 150, 80), "Back to main menu"))
+            {
+                Application.LoadLevel("menu");
+            }
+
+            else if (GUI.Button(new Rect((Screen.width / 2) - 75, 350, 150, 80), "Resume game"))
+            {
+                PauseGame();
+            }
+        }
         /*
         scale.x = Screen.width / originalWidth; // calculate hor scale
         scale.y = Screen.height / originalHeight; // calculate vert scale
