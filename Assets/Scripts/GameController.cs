@@ -32,6 +32,8 @@ using System.Collections;
  * every x waves combine asteroids and ships
  * Make ships randomly "stop" in different imaginary rows (1-3), and then randomly attack
     
+ * make mothership fire different things at different speeds
+ * can use mothership "game logic" to controll waves? 
  * 10 waves - mother ship, shots missiles, spawns tons of small ships
  */
 
@@ -46,12 +48,14 @@ public class GameController : MonoBehaviour
 
     public MoverEnemyShip moverEnemyShip;
     public PlayerController playerController;
+    public DestroyByContactMothership destroyByContactMothership;
     public Mover mover;
 
     public float instructionTime;
     private bool newGame;
 
     // Game data
+    public bool mothershipAlive; // Test to see if mothership is alive or not
     private bool paused;
     private float shipSpeed; // Original peed of enemy ships
     private float shipFireRate; // Original ship fire rate
@@ -498,17 +502,21 @@ public class GameController : MonoBehaviour
             // Mother ship every 10 waves
             if (waveCount % 1 == 0)
             {
-                Vector3 spawnPositionMothership = new Vector3(0.0f, 0.0f, 7.2f);               
+                Vector3 spawnPositionMothership = new Vector3(0.0f, 0.0f, 12.0f);               
                 Quaternion spawnRotationMothership = Quaternion.identity;
                 Instantiate(motherShip, spawnPositionMothership, spawnRotationMothership);
+                mothershipAlive = true;
 
                 // While fighting boss, wait
                 while (true)
                 {
                     yield return new WaitForSeconds(1.0f);
 
-                    // if boss destroyed, break loop
+                    if (!mothershipAlive)
+                    {
+                        //yield return new WaitForSeconds(3.0f);
                         break;
+                    }
                 }
             }
 

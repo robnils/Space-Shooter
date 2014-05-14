@@ -196,7 +196,6 @@ public class MoverEnemyShip : MonoBehaviour
 
         if (rigidbody.position.x <= boundary.xMin)
         {
-
             movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f);
             rigidbody.velocity = movement;
         }
