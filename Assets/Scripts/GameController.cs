@@ -519,6 +519,7 @@ public class GameController : MonoBehaviour
                 Quaternion spawnRotationMothership = Quaternion.identity;
                 Instantiate(motherShip, spawnPositionMothership, spawnRotationMothership);
                 mothershipAlive = true;
+                backgroundMusic.audio.Stop();
 
                 // While fighting boss, wait
                 while (true)
@@ -528,6 +529,7 @@ public class GameController : MonoBehaviour
                     if (!mothershipAlive)
                     {
                         //yield return new WaitForSeconds(3.0f);
+                        backgroundMusic.audio.Play();
                         break;
                     }
                 }
