@@ -62,6 +62,7 @@ public class GameController : MonoBehaviour
     private float shipFireRate; // Original ship fire rate
     private float hazardSpeed; // Original asteroid speed
     public GameObject[] asteroidsObjects;
+    private bool scoreLife; // A flag for giving lives at certain scores
 
     public int totalNumberOfEnemies; // keeps track of number of enemies
 
@@ -130,7 +131,8 @@ public class GameController : MonoBehaviour
 
             else if (GUI.Button(new Rect((Screen.width / 2) - 75, 350, 150, 80), "Resume game"))
             {
-                PauseGame();
+                Screen.showCursor = false;
+                PauseGame();                
             }
         }
         /*
@@ -219,10 +221,14 @@ public class GameController : MonoBehaviour
         
         //FullScreenText();
         Screen.fullScreen = true;
+        Screen.showCursor = false;
         UpdateCurrentWaveText();
 
         // Tests
         test.enabled = false;
+
+        // For points and lives
+        scoreLife = true;
 
         // Pausing
         paused = false;
@@ -376,20 +382,26 @@ public class GameController : MonoBehaviour
 		score += newScoreValue;
 		UpdateScore ();
 
-        // Add life every 5 000 points
-        if (score % 5000 == 0)
+        // Add life every 5 000 points - doesn't work
+        if (score >= 5000 && score % 5000 == 0)
         {
             playerController.AddLife();
             StartCoroutine(AddLifeText());
+            scoreLife = false;
         }
-     
 	}
+
+    IEnumerator WaitForLives()
+    {
+        yield return new WaitForSeconds(40);
+        scoreLife = true;
+    }
 
     public IEnumerator AddLifeText()
     {
-        newLifeText.enabled = true;
+        newLifeText.text = "New life!";  
         yield return new WaitForSeconds(4.0f);
-        newLifeText.enabled = false;
+        newLifeText.text = "";
     }
 
     // For updating the game
@@ -558,7 +570,7 @@ public class GameController : MonoBehaviour
                     // NOTE: Make a "Mother Ship" that's big and evades attacks?
                     if (waveCount % 2 == 0)
                     {
-                        SpawnEnemyShips(i);
+                        StartCoroutine(SpawnEnemyShips(i));
 
                         test.text = totalNumberOfEnemies.ToString();
                         break;
@@ -568,7 +580,7 @@ public class GameController : MonoBehaviour
                     {
                         SpawnAsteroids(i);
                         yield return new WaitForSeconds(spawnWait / 2.0f);
-                        SpawnEnemyShips(i);
+                        StartCoroutine(SpawnEnemyShips(i));
                     }
 
 
@@ -607,7 +619,7 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-    private void SpawnEnemyShips(int i)
+    IEnumerator SpawnEnemyShips(int i)
     {        
         if (i == 0)
         {
@@ -638,7 +650,7 @@ public class GameController : MonoBehaviour
                 Quaternion spawnRotationEnemy = Quaternion.identity;
                 Instantiate(enemyShip, spawnPositionEnemy, spawnRotationEnemy);
 
-
+                yield return new WaitForSeconds(spawnWait);
                 totalNumberOfEnemies++;
             }
         }
