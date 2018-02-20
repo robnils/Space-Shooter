@@ -60,8 +60,8 @@ public class PlayerController : MonoBehaviour
         newLivesCount = 0;
 
         // Save "correct" sound timesample and pitch
-        timeSamplePoweredDown = powerupSoundEffect.audio.timeSamples;
-        pitchPoweredDown = powerupSoundEffect.audio.pitch;
+        timeSamplePoweredDown = powerupSoundEffect.GetComponent<AudioSource>().timeSamples;
+        pitchPoweredDown = powerupSoundEffect.GetComponent<AudioSource>().pitch;
 
         // Game controller object set up
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -73,6 +73,7 @@ public class PlayerController : MonoBehaviour
 
         if (gameControllerObject == null)
             Debug.Log("Cannot find 'GameController' script");
+        
         
     }
 	public void Update()
@@ -99,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
                 nextFire = Time.time + fireRate;
                 Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-                audio.Play(); // plays the associated audio source - bolt sound
+                GetComponent<AudioSource>().Play(); // plays the associated audio source - bolt sound
             }
 
             else
@@ -181,6 +182,9 @@ public class PlayerController : MonoBehaviour
                 }
                 ++column;
             }
+
+            // Show text & play sound(?)
+            //StartCoroutine(gameController.AddLifeText());
         }
     }
   
@@ -191,13 +195,13 @@ public class PlayerController : MonoBehaviour
         powerupWaveCount = 0;
 
         // Return sound timesample and pitch
-        powerupSoundEffect.audio.timeSamples = timeSamplePoweredDown;
-        powerupSoundEffect.audio.pitch = pitchPoweredDown; 
+        powerupSoundEffect.GetComponent<AudioSource>().timeSamples = timeSamplePoweredDown;
+        powerupSoundEffect.GetComponent<AudioSource>().pitch = pitchPoweredDown; 
 
         // Play/Stop music        
-        powerupMusic.audio.Play();
-        backgroundMusic.audio.Stop();
-        powerupSoundEffect.audio.Play();
+        powerupMusic.GetComponent<AudioSource>().Play();
+        backgroundMusic.GetComponent<AudioSource>().Stop();
+        powerupSoundEffect.GetComponent<AudioSource>().Play();
 
         // Poweredup text
         StartCoroutine(PoweredUpText());
@@ -212,13 +216,13 @@ public class PlayerController : MonoBehaviour
         powerUpModeActivated = false; 
 
         // Play/Stop music        
-        powerupMusic.audio.Stop();
-        backgroundMusic.audio.Play();
+        powerupMusic.GetComponent<AudioSource>().Stop();
+        backgroundMusic.GetComponent<AudioSource>().Play();
         
         // Powerdown sound effect Code
-        powerupSoundEffect.audio.timeSamples = powerupSoundEffect.audio.clip.samples - 1;
-        powerupSoundEffect.audio.pitch = -1;
-        powerupSoundEffect.audio.Play(); 
+        powerupSoundEffect.GetComponent<AudioSource>().timeSamples = powerupSoundEffect.GetComponent<AudioSource>().clip.samples - 1;
+        powerupSoundEffect.GetComponent<AudioSource>().pitch = -1;
+        powerupSoundEffect.GetComponent<AudioSource>().Play(); 
      
         // Powered down text
         StartCoroutine(PoweredDownText());
@@ -288,7 +292,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator PowerupModeEnum()
     {
         yield return new WaitForSeconds(1.0f);
-        powerupMusic.audio.Play();
+        powerupMusic.GetComponent<AudioSource>().Play();
     }
     
 
@@ -322,11 +326,11 @@ public class PlayerController : MonoBehaviour
     private void PowerUpMultipleBolts()
     {        
         Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-        powerupWeapon.audio.Play();
+        powerupWeapon.GetComponent<AudioSource>().Play();
         Instantiate(shotLeft, shotSpawnLeft.position, shotSpawnLeft.rotation);
-        powerupWeapon.audio.Play();
+        powerupWeapon.GetComponent<AudioSource>().Play();
         Instantiate(shotRight, shotSpawnRight.position, shotSpawnRight.rotation);
-        powerupWeapon.audio.Play();
+        powerupWeapon.GetComponent<AudioSource>().Play();
     }
 
 	void FixedUpdate()
@@ -336,7 +340,7 @@ public class PlayerController : MonoBehaviour
 
 		// 2D plane so y cmmpt = 0
 		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
-		rigidbody.velocity = speed*movement;
+		GetComponent<Rigidbody>().velocity = speed*movement;
 
         //Mouse movement   
         // If mouse moves...
@@ -349,20 +353,20 @@ public class PlayerController : MonoBehaviour
             moveVertical = Input.GetAxis("Mouse Y");
 
             movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-            rigidbody.velocity = speed * movement * 1.5f; // 1.5f to increase mouse sensitivity
+            GetComponent<Rigidbody>().velocity = speed * movement * 1.5f; // 1.5f to increase mouse sensitivity
         }      
 
 		// Creates a new position vector each frame that is "clamped" 
 		// border-wise by xMin, xMax, zMin, zMax
-		rigidbody.position = new Vector3 
+		GetComponent<Rigidbody>().position = new Vector3 
 		(
-				Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax),
+				Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax),
 				0.0f, 
-				Mathf.Clamp(rigidbody.position.z, boundary.zMin, boundary.zMax)
+				Mathf.Clamp(GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax)
 		);
 
 		// For the tilt when moving along horizontal axis
 		// Negative so it doesn't tilt toward the player
-		rigidbody.rotation = Quaternion.Euler(0,0,rigidbody.velocity.x*(-tilt));
+		GetComponent<Rigidbody>().rotation = Quaternion.Euler(0,0,GetComponent<Rigidbody>().velocity.x*(-tilt));
 	}
 }

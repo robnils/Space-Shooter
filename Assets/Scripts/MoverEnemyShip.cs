@@ -65,22 +65,22 @@ public class MoverEnemyShip : MonoBehaviour
 		//movement = rigidbody.velocity; // save starting velocity
 
         // Needed to flip the ship
-        rigidbody.rotation = Quaternion.Euler(180, 0, 0);
+        GetComponent<Rigidbody>().rotation = Quaternion.Euler(180, 0, 0);
 
         // Gives downward velocity
         newSpeed = speed + Random.Range(-1.0f, 1.0f);
         
         // Weird game bug - the ships go the wrong direction when spawned from the mother ship!
         if (gameController.mothershipAlive)
-            rigidbody.velocity = transform.forward * (newSpeed);
+            GetComponent<Rigidbody>().velocity = transform.forward * (newSpeed);
 
         else
         {
             newSpeed = speed + 2 + Random.Range(-1.0f, 1.0f);
-            rigidbody.velocity = transform.forward * (-newSpeed);            
+            GetComponent<Rigidbody>().velocity = transform.forward * (-newSpeed);            
         }
 
-        movement = rigidbody.velocity;
+        movement = GetComponent<Rigidbody>().velocity;
         boundary.zMin = 8.5f;
         nextFire = Time.time + 1; // Wait one second before firing
 	}
@@ -92,7 +92,7 @@ public class MoverEnemyShip : MonoBehaviour
         {
             nextFire = Time.time + fireRate + Random.Range(0.0f, 0.75f);
             Instantiate(shot, shotSpawn.position, shotSpawn.rotation);            
-            audio.Play();
+            GetComponent<AudioSource>().Play();
         }
 
         // If moving downward to evade
@@ -101,14 +101,14 @@ public class MoverEnemyShip : MonoBehaviour
             //boundary.zMin = 8.5f;
             if (initialEvade)
             {
-                currentSpeed = rigidbody.velocity.z;                
+                currentSpeed = GetComponent<Rigidbody>().velocity.z;                
                 StartCoroutine(Evade());
 
                 initialEvade= false;
             }
 
-            float newManeuver = Mathf.MoveTowards(rigidbody.velocity.x, targetManeuver, smoothing * Time.deltaTime);
-            rigidbody.velocity = new Vector3(newManeuver, 0.0f, currentSpeed);
+            float newManeuver = Mathf.MoveTowards(GetComponent<Rigidbody>().velocity.x, targetManeuver, smoothing * Time.deltaTime);
+            GetComponent<Rigidbody>().velocity = new Vector3(newManeuver, 0.0f, currentSpeed);
 
             /*
             float delta = 0.1f;
@@ -142,11 +142,11 @@ public class MoverEnemyShip : MonoBehaviour
 
             // Make ship bounded by boundaries
             // Use random number generator to clamp into different rows
-            rigidbody.position = new Vector3
+            GetComponent<Rigidbody>().position = new Vector3
                 (
-                    Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax),
+                    Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax),
                     0.0f,
-                    Mathf.Clamp(rigidbody.position.z, -6.5f, 16.7f)
+                    Mathf.Clamp(GetComponent<Rigidbody>().position.z, -6.5f, 16.7f)
                     );
 
             
@@ -166,42 +166,42 @@ public class MoverEnemyShip : MonoBehaviour
         {
 
             // Make the ship bounce off the left and right
-            if (rigidbody.position.x >= boundary.xMax)
+            if (GetComponent<Rigidbody>().position.x >= boundary.xMax)
             {
                 movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f);
-                rigidbody.velocity = movement;
+                GetComponent<Rigidbody>().velocity = movement;
             }
 
-            if (rigidbody.position.x <= boundary.xMin)
+            if (GetComponent<Rigidbody>().position.x <= boundary.xMin)
             {
 
                 movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f);
-                rigidbody.velocity = movement;
+                GetComponent<Rigidbody>().velocity = movement;
             }
 
             // Make the ship bounce off top and bottom
-            if (rigidbody.position.z >= boundary.zMax)
+            if (GetComponent<Rigidbody>().position.z >= boundary.zMax)
             {
                 movement.z = -1 * movement.z * Random.Range(0.5f, 1.0f);
-                rigidbody.velocity = movement;
+                GetComponent<Rigidbody>().velocity = movement;
             }
 
-            if (rigidbody.position.z <= boundary.zMin)
+            if (GetComponent<Rigidbody>().position.z <= boundary.zMin)
             {
                 movement.z = -1 * movement.x * Random.Range(0.5f, 1.0f);
-                rigidbody.velocity = movement;
+                GetComponent<Rigidbody>().velocity = movement;
             }
 
             // Make ship bounded by different boundaries
-            rigidbody.position = new Vector3
+            GetComponent<Rigidbody>().position = new Vector3
                 (
-                    Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax),
+                    Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax),
                     0.0f,
-                    Mathf.Clamp(rigidbody.position.z, -6.5f, boundary.zMax)
+                    Mathf.Clamp(GetComponent<Rigidbody>().position.z, -6.5f, boundary.zMax)
                     );
         }
 		// Ship movement tilt
-		rigidbody.rotation = Quaternion.Euler(180,0,rigidbody.velocity.x*(tilt));
+		GetComponent<Rigidbody>().rotation = Quaternion.Euler(180,0,GetComponent<Rigidbody>().velocity.x*(tilt));
         //shotSpawn.rotation = Quaternion.Euler(0, 0, 180);
 	}
 
@@ -209,29 +209,29 @@ public class MoverEnemyShip : MonoBehaviour
     private void Bounce()
     {
         // Make the ship bounce off the left and right
-        if (rigidbody.position.x >= boundary.xMax)
+        if (GetComponent<Rigidbody>().position.x >= boundary.xMax)
         {
             movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f);
-            rigidbody.velocity = movement;
+            GetComponent<Rigidbody>().velocity = movement;
         }
 
-        if (rigidbody.position.x <= boundary.xMin)
+        if (GetComponent<Rigidbody>().position.x <= boundary.xMin)
         {
             movement.x = -1 * movement.x * Random.Range(0.5f, 1.0f);
-            rigidbody.velocity = movement;
+            GetComponent<Rigidbody>().velocity = movement;
         }
 
         // Make the ship bounce off top and bottom
-        if (rigidbody.position.z >= boundary.zMax)
+        if (GetComponent<Rigidbody>().position.z >= boundary.zMax)
         {
             movement.z = -1 * movement.z * Random.Range(0.5f, 1.0f);
-            rigidbody.velocity = movement;
+            GetComponent<Rigidbody>().velocity = movement;
         }
 
-        if (rigidbody.position.z <= boundary.zMin)
+        if (GetComponent<Rigidbody>().position.z <= boundary.zMin)
         {
             movement.z = -1 * movement.x * Random.Range(0.5f, 1.0f);
-            rigidbody.velocity = movement;
+            GetComponent<Rigidbody>().velocity = movement;
         }
     }
 

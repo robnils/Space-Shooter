@@ -1,15 +1,10 @@
-﻿<Properties>
+﻿<Properties StartupConfiguration="{E2DB34C1-C76B-86AF-2C0A-4B4232B9B951}|">
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
-    <Files>
-      <File FileName="SpaceShooter.sln" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MoverEnemyShip.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameController.cs" Line="111" Column="36" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.SpaceShooter PreferredExecutionTarget="Unity.Editor" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
 </Properties>

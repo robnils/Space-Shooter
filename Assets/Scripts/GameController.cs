@@ -156,6 +156,8 @@ public class GameController : MonoBehaviour
 
         // Set up lives
         SetUpLives();
+        //playerController.AddLife();
+        //StartCoroutine(AddLifeText());
 
         // Store initial values
         StoreSpeeds();
@@ -174,7 +176,7 @@ public class GameController : MonoBehaviour
 		StartCoroutine (SpawnWaves ());;
 
         // Play background music
-        backgroundMusic.audio.Play();
+        backgroundMusic.GetComponent<AudioSource>().Play();
     }
 
     // Initialise number oflives
@@ -193,7 +195,7 @@ public class GameController : MonoBehaviour
     private void Initialise()
     {
         // Disable mouse cursor
-        Screen.showCursor = false; 
+        Cursor.visible = false; 
 
         // Basic initialisations
         score = 0;
@@ -214,13 +216,13 @@ public class GameController : MonoBehaviour
         test.text = "";
         pausedText.text = "";
         newHighestWaveText.text = "";
-        newLifeText.enabled = false;
+        newLifeText.text = "";
         poweredUpText.enabled = false;
         poweredDownText.enabled = false;
         
         //FullScreenText();
         Screen.fullScreen = true;
-        Screen.showCursor = false;
+        Cursor.visible = false;
         UpdateCurrentWaveText();
 
         // Tests
@@ -232,6 +234,8 @@ public class GameController : MonoBehaviour
         // Pausing
         paused = false;
         timeScale = Time.timeScale; // Store current time scale
+
+        
     }
 
     // Enter fullscreen text
@@ -470,10 +474,10 @@ public class GameController : MonoBehaviour
         // If not paused, pause
         if (!paused)
         {
-            Screen.showCursor = true; 
-            pausedObject.audio.Play();
+            Cursor.visible = true; 
+            pausedObject.GetComponent<AudioSource>().Play();
             //audio.Stop(); // Pause background music
-            backgroundMusic.audio.volume = 0.1f;
+            backgroundMusic.GetComponent<AudioSource>().volume = 0.1f;
             pausedText.text = "Paused";
             paused = true;
             Time.timeScale = 0;
@@ -482,10 +486,10 @@ public class GameController : MonoBehaviour
         // Otherwise unpause
         else if (paused)
         {
-            Screen.showCursor = false;
-            pausedObject.audio.Play();
+            Cursor.visible = false;
+            pausedObject.GetComponent<AudioSource>().Play();
             //audio.Play(); // Resume background music
-            backgroundMusic.audio.volume = 0.5f;
+            backgroundMusic.GetComponent<AudioSource>().volume = 0.5f;
             pausedText.text = "";
             paused = false;
             Time.timeScale = timeScale;
@@ -547,7 +551,7 @@ public class GameController : MonoBehaviour
                 Quaternion spawnRotationMothership = Quaternion.identity;
                 Instantiate(motherShip, spawnPositionMothership, spawnRotationMothership);
                 mothershipAlive = true;
-                backgroundMusic.audio.Stop();
+                backgroundMusic.GetComponent<AudioSource>().Stop();
 
                 // While fighting boss, wait
                 while (true)
@@ -557,7 +561,8 @@ public class GameController : MonoBehaviour
                     if (!mothershipAlive)
                     {
                         //yield return new WaitForSeconds(3.0f);
-                        backgroundMusic.audio.Play();
+                        backgroundMusic.GetComponent<AudioSource>().Play();
+                        StartCoroutine(AddLifeText()); // Display text for new life
                         break;
                     }
                 }
