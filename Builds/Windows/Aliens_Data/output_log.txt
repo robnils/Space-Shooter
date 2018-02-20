@@ -1,0 +1,91 @@
+Initialize engine version: 4.3.4f1 (e444f76e01cd)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 9.0c [nvumdshim.dll 9.18.13.3523]
+    Renderer: NVIDIA GeForce GT 650M 
+    Vendor:   NVIDIA
+    VRAM:     1985 MB (via DXGI)
+    Caps:     Shader=30 DepthRT=1 NativeDepth=1 NativeShadow=1 DF16=0 INTZ=1 RAWZ=0 NULL=1 RESZ=0 SlowINTZ=0
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\All\Projects\#Unity\SpaceShooter\Builds\Windows\FuckingAliens\FuckingAliens_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\All\Projects\#Unity\SpaceShooter\Builds\Windows\FuckingAliens\FuckingAliens_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\All\Projects\#Unity\SpaceShooter\Builds\Windows\FuckingAliens\FuckingAliens_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\All\Projects\#Unity\SpaceShooter\Builds\Windows\FuckingAliens\FuckingAliens_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+- Completed reload, in  0.063 seconds
+desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+UnloadTime: 0.296813 ms
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 6 unused Assets to reduce memory usage. Loaded Objects now: 651.
+Total: 1.123213 ms (FindLiveObjects: 0.031200 ms CreateObjectMapping: 0.011084 ms MarkObjects: 0.248371 ms  DeleteObjects: 0.249192 ms)
+
+Can not play a disabled audio source
+ 
+(Filename:  Line: 374)
+
+bolt hit player,# of lives is: 1
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Can not play a disabled audio source
+ 
+(Filename:  Line: 374)
+
+bolt hit player,# of lives is: 1
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+bolt hit player,# of lives is: 0
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+Cannot find 'PlayerController' script
+ 
+(Filename: C:/BuildAgent/work/d3d49558e4d408f4/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 53)
+
+UnloadTime: 4.735886 ms
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 657.
+Total: 1.934422 ms (FindLiveObjects: 0.055011 ms CreateObjectMapping: 0.027505 ms MarkObjects: 0.500847 ms  DeleteObjects: 0.012315 ms)
+
+UnloadTime: 1.171245 ms
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0 / Dirty serialized files: 0)
+
+Unloading 369 unused Assets to reduce memory usage. Loaded Objects now: 166.
+Total: 12.962110 ms (FindLiveObjects: 0.045568 ms CreateObjectMapping: 0.023810 ms MarkObjects: 0.226202 ms  DeleteObjects: 11.267436 ms)
+
